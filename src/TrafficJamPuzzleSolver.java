@@ -24,7 +24,7 @@ public class TrafficJamPuzzleSolver {
         TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicRemove();
         TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
 
-        AI ai_0 = new AI(boardData, h0); //initialize
+        AI ai_0 = new AI(boardData, h1); //initialize
         ai_0.initialBoard.printBoard();
         Board terminalBoard1 = ai_0.AStarSearch();
         List<AIAction> solution0 = ai_0.buildPath(terminalBoard1);

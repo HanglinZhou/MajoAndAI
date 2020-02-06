@@ -135,7 +135,8 @@ public class AI {
         Board successor = new Board(currBoard, action);
 
         //compute cost f(n) = g(n) + h(n)
-        int cost = currBoard.getCost() + 1 + myHeuristic.computeEstCost(successor, successor.getRedCar());
+        successor.setActualCost(currBoard.getActualCost() + 1);
+        int cost = currBoard.getActualCost() + 1 + myHeuristic.computeEstCost(successor, successor.getRedCar());
         successor.setCost(cost);
         return successor;
     }

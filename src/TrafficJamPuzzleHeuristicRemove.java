@@ -14,8 +14,11 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
         int rowOfRedCar = redCar.getCoord()[0]; // the row the red car is in
         int allCost = 0;
         List<Vehicle> allVehicles = board.getVehicles();
+        this.board = board;
+
         int[][] actualBoard = board.getBoard();
         for (int row = 0; row < rowOfRedCar; row++) {
+
             int id = this.board.getBoard()[row][Board.getDoorColumn()];
             if (id != -1) {  // if that grid is occupied
                 Vehicle vehicle = this.board.getVehicle(id);
@@ -30,6 +33,8 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
                 if (leftCost == Integer.MAX_VALUE && rightCost == Integer.MAX_VALUE)
                     return Integer.MAX_VALUE;
                 allCost += Math.min(leftCost, rightCost);
+                System.out.println("min: " + Math.min(leftCost, rightCost));
+                System.out.println("allCost: " + allCost);
             }
 
         }
@@ -39,8 +44,10 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
 
     private int tryMoveAndComputeCost(Vehicle.Direction dir, Vehicle vehicle, int[][] actualBoard, List<Vehicle> allVehicles) {
         int[] vCoord = vehicle.getCoord();
-        int nextVId = -1;
+        int nextVId;
 
+        if (dir == Vehicle.Direction.UP || dir == Vehicle.Direction.DOWN)
+            return 0;
         //base case: wall || blank
         if (dir == Vehicle.Direction.LEFT) {
             //wall
@@ -55,22 +62,24 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
             //collide
             nextVId = actualBoard[vCoord[0]][vCoord[1] - 1];
 
-        }
-        //wall
-        if (vCoord[1] == actualBoard.length - 1)
-            return Integer.MAX_VALUE;
+        } else {
+            //wall
+            if (vCoord[1]+ vehicle.getLength() == actualBoard.length)
+                return Integer.MAX_VALUE;
 
-        //right is blank
-        if (!board.isGridOccupied(vCoord[0], vCoord[1] + 1)) {
-            return 1;
-        }
-        if (dir == Vehicle.Direction.RIGHT) {
-            nextVId = actualBoard[vCoord[0]][vCoord[1] + 1];
+            //right is blank
+            if (!board.isGridOccupied(vCoord[0], vCoord[1] + vehicle.getLength())) {
+                return 1;
+            }
+            nextVId = actualBoard[vCoord[0]][vCoord[1] + vehicle.getLength()];
+
         }
         int cost = tryMoveAndComputeCost(dir, allVehicles.get(nextVId), actualBoard, allVehicles);
         if (cost == Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
-        } else return cost + 1;
+        } else if (nextVId == vehicle.getId())
+            return cost;
+        else return cost + 1;
 
     }
 }

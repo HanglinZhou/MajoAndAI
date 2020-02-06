@@ -13,6 +13,16 @@ public class Board {
 
     int[][] board;
     int cost; //f(n) = g(n)+h(n)
+
+    public int getActualCost() {
+        return actualCost;
+    }
+
+    public void setActualCost(int actualCost) {
+        this.actualCost = actualCost;
+    }
+
+    int actualCost = 0;
     Board parent; //the state/board from which this board is reached
     AIAction actionTaken; //how I was born
 
