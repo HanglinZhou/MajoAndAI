@@ -180,7 +180,21 @@ public class Board {
     public void printBoard() {
         final int GRIDLENGTH = 4;
         int n = this.board.length;
-        System.out.println("board has length " + n);
+
+        // print gate
+        String gate = "";
+        for (int c = 0; c < Board.getDoorColumn(); c++) {
+            for (int k = 0; k < GRIDLENGTH + 1; k++) {
+                gate += ' ';
+            }
+        }
+        for (int k = 0; k < GRIDLENGTH + 1; k++) {
+            gate += '_';
+        }
+        while (gate.length() < (n + 1) * GRIDLENGTH + 2)
+            gate += ' ';
+        System.out.println(gate);
+
 
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < (n + 1) * GRIDLENGTH + 2; c++) {
@@ -265,7 +279,7 @@ public class Board {
 
         for (Vehicle v : vehicles) {
             vehicleHead = v.getCoord();
-            System.out.printf("id: %s, x: %s, y: %s\n", v.getId(), v.getCoord()[0], v.getCoord()[1]);
+            //System.out.printf("id: %s, x: %s, y: %s\n", v.getId(), v.getCoord()[0], v.getCoord()[1]);
             if (v.movesVertically()) { // check up and down, so row varies while col
                 rowFront = vehicleHead[0] - 1;
                 rowBack = vehicleHead[0] + v.getLength();
