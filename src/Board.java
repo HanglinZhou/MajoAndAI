@@ -6,9 +6,10 @@ import java.util.List;
  * The snapshot of the current parking lot/ the puzzle board, which is also the state of our search space.
  */
 public class Board {
-    int doorColumn; //door row = 0
+    static int doorColumn; //door row = 0
+    static List<Vehicle> vehicles; //vehicles on this board, index of the vehicle corresponds to its id
+
     int[][] board;
-    List<Vehicle> vehicles; //vehicles on this board, index of the vehicle corresponds to its id
     int cost; //f(n) = g(n)+h(n)
     Board parent; //the state/board from which this board is reached
     AIAction actionTaken; //how I was born
@@ -17,11 +18,16 @@ public class Board {
         //todo
     }
 
-    public int getDoorColumn() { return doorColumn; }
+    public static int getDoorColumn() { return doorColumn; }
+
+    // returns the vehicle with id
+    public static Vehicle getVehicle(int id) { return vehicles.get(id); }
 
     public int[][] getBoard() {
         return board;
     }
+
+    public boolean isGridOccupied(int r, int c) { return !(this.board[r][c] == -1); }
 
     public void setBoard(int[][] board) {
         this.board = board;
@@ -31,8 +37,6 @@ public class Board {
         return vehicles;
     }
 
-    // returns the vehicle with id
-    public Vehicle getVehicle(int id) { return vehicles.get(id); }
 
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
