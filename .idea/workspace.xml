@@ -5,10 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TrafficJamPuzzleSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrafficJamPuzzleSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,43 +19,39 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>todo</find>
-      <find>computev</find>
-      <find>-1</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="752" />
-  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TrafficJamPuzzleSolver">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <module />
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="lab1" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="TrafficJamPuzzleSolver" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="TrafficJamPuzzleSolver" />
@@ -104,6 +96,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.TrafficJamPuzzleSolver" />
+        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -125,6 +118,48 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="563" y="307" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1580970106178">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state x="563" y="307" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.23.1440.813@0.23.1440.813" timestamp="1580970106178" />
+    <state width="1387" height="462" key="GridCell.Tab.0.bottom" timestamp="1580986763163">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1387" height="462" key="GridCell.Tab.0.bottom/0.23.1440.813@0.23.1440.813" timestamp="1580986763163" />
+    <state width="1387" height="462" key="GridCell.Tab.0.center" timestamp="1580986763163">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1387" height="462" key="GridCell.Tab.0.center/0.23.1440.813@0.23.1440.813" timestamp="1580986763163" />
+    <state width="1387" height="462" key="GridCell.Tab.0.left" timestamp="1580986763163">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1387" height="462" key="GridCell.Tab.0.left/0.23.1440.813@0.23.1440.813" timestamp="1580986763163" />
+    <state width="1387" height="462" key="GridCell.Tab.0.right" timestamp="1580986763163">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1387" height="462" key="GridCell.Tab.0.right/0.23.1440.813@0.23.1440.813" timestamp="1580986763163" />
+    <state width="1358" height="166" key="GridCell.Tab.1.bottom" timestamp="1580975345459">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1358" height="166" key="GridCell.Tab.1.bottom/0.23.1440.813@0.23.1440.813" timestamp="1580975345459" />
+    <state width="1358" height="166" key="GridCell.Tab.1.center" timestamp="1580975345459">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1358" height="166" key="GridCell.Tab.1.center/0.23.1440.813@0.23.1440.813" timestamp="1580975345459" />
+    <state width="1358" height="166" key="GridCell.Tab.1.left" timestamp="1580975345459">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1358" height="166" key="GridCell.Tab.1.left/0.23.1440.813@0.23.1440.813" timestamp="1580975345459" />
+    <state width="1358" height="166" key="GridCell.Tab.1.right" timestamp="1580975345459">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state width="1358" height="166" key="GridCell.Tab.1.right/0.23.1440.813@0.23.1440.813" timestamp="1580975345459" />
+    <state x="271" y="29" width="673" height="708" key="find.popup" timestamp="1580984367209">
+      <screen x="0" y="23" width="1440" height="813" />
+    </state>
+    <state x="271" y="29" width="673" height="708" key="find.popup/0.23.1440.813@0.23.1440.813" timestamp="1580984367209" />
   </component>
   <component name="masterDetails">
     <states>
