@@ -17,7 +17,7 @@ public class AI {
      * @param boardData
      * @param doorCoord
      */
-    public AI(int[][] boardData, int[][] doorCoord, TrafficJamPuzzleHeuristic h) {
+    public AI(int[][] boardData, int doorCoord, TrafficJamPuzzleHeuristic h) {
         //todo
         frontier = new PriorityQueue<>((o1, o2) -> o1.getCost() - o2.getCost());
     }
