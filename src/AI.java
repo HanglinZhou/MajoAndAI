@@ -111,7 +111,6 @@ public class AI {
      * @return the successor board (state) as the result of the successor function
      */
     private Board successorFunction(Board currBoard, AIAction action) {
-        //todo
         //construct successor board
         Board successor = new Board(currBoard, action);
 
