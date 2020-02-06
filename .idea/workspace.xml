@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0a45c376-3170-4e71-8a3b-0140d041b0f1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrafficJamPuzzleHeuristicOverlap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrafficJamPuzzleHeuristicOverlap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrafficJamPuzzleHeuristicRemove.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrafficJamPuzzleHeuristicRemove.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TrafficJamPuzzleSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrafficJamPuzzleSolver.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+</project>
