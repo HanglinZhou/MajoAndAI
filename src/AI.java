@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -45,6 +46,8 @@ public class AI {
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -55,6 +58,7 @@ public class AI {
      */
     public List<AIAction> buildPath(Board terminalBoard) {
         //todo
+        return new ArrayList<>();
     }
 
     /**
@@ -75,6 +79,7 @@ public class AI {
     private Board successorFunction(Board currBoard, AIAction action) {
         //assign computed f(n) in here
         //todo
+        return null;
     }
 
     /**
