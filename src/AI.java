@@ -100,6 +100,7 @@ public class AI {
 
             path.add(currentBoard.getActionTaken());
             path.get(path.size() - 1).printAIAction();
+            currentBoard.printBoard();
         }
     }
 

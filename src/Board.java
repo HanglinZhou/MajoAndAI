@@ -24,6 +24,7 @@ public class Board {
                 board[i][j] = boardData[i][j];
         }
 
+
         doorColumn = boardData[boardData.length-1][boardData.length-1];
 
         boolean sawRedCar = false;
@@ -84,6 +85,7 @@ public class Board {
                 }
 
             }
+
         }
 
         cost = 0;
