@@ -86,11 +86,11 @@ public class TrafficJamPuzzleHeuristicOverlap implements TrafficJamPuzzleHeurist
         int numMoves;
         if (direction == Vehicle.Direction.LEFT) {
             numMoves = vehicle.getLength() - numGridsLeftOfDoorCol;
-            if (Board.getDoorColumn() - numMoves < 0)
+            if (vehicle.getCoord()[1] - numMoves < 0)
                 return Integer.MAX_VALUE;
         } else {
             numMoves = numGridsLeftOfDoorCol + 1;
-            if (numMoves + numMoves >= board.getBoard().length)
+            if (vehicle.getCoord()[1] + vehicle.getLength() - 1 + numMoves >= board.getBoard().length)
                 return Integer.MAX_VALUE;
         }
         return numMoves;

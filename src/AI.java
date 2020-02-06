@@ -17,12 +17,12 @@ public class AI {
         myHeuristic = h;
         visitedBoards = new HashSet<>();
 
-        // initiate the initial state/board, put it into the frontier
-        Board initalBoard = new Board(boardData);
-        frontier.add(initalBoard);
+        // initiate the initial state/board
+        this.initialBoard = new Board(boardData);
+        //frontier.add(initalBoard);
 
         System.out.println("AI initialized, board printing");
-        initalBoard.printBoard();
+        //initalBoard.printBoard();
 
 
     }
@@ -36,19 +36,36 @@ public class AI {
         //todo
         frontier.offer(initialBoard);
         while (!frontier.isEmpty()) {
+            System.out.println("frontier size " + frontier.size());
             Board currBoard = frontier.poll();
+            // currBoard.printBoard();
 
             if (passGoalTest(currBoard))
                 return currBoard;
 
-            visitedBoards.add(currBoard);
             if (!visitedBoards.contains(currBoard)) {
+                visitedBoards.add(currBoard);
+                //currBoard.printBoard();
                 for (AIAction a : currBoard.computeValidActions()) {
+                    //a.printAIAction();
                     Board successor = successorFunction(currBoard, a);
-                    if (!visitedBoards.contains(successor))
-                        frontier.offer(successor);
+                    //currBoard.printBoard();
+                    if (!visitedBoards.contains(successor)) {
+                        for (Board b : visitedBoards) {
+                            /*
+                            if (b.equals(successor)) {
+                                b.printBoard();
+                                System.out.println("EQUAL");
+                                successor.printBoard();
+                                System.out.println("+++++++++++++++++++++++++++++");
 
+                            }
+                            */
+                        }
+                        frontier.offer(successor);
+                    }
                 }
+
             }
         }
 
@@ -73,6 +90,7 @@ public class AI {
         // from the terminal board, continue tracing back to the parent, until the initial state is reached,
         // and add the actions accordingly to reconstruct the path chosen
         while (currentBoard.parent != null) {
+            //currentBoard.printBoard();
             // while the current board is not the initial state/board, add the action taken to reach current board
             currentBoard = currentBoard.parent;
             reverseBoards.push(currentBoard);
@@ -93,6 +111,7 @@ public class AI {
 
         // print initial board
         Board currentBoard = reversedBoards.pop();
+        //todo
         currentBoard.printBoard();
 
         while (!reversedBoards.isEmpty()) {
@@ -130,10 +149,8 @@ public class AI {
      */
     private boolean passGoalTest(Board currBoard) {
         //don't need to check the column position, the only valid row is 0 or 1 for a car
-        /*
-        if (redCar.getCoord()[0] == 0)
+        if (currBoard.getRedCar().getCoord()[0] == 0)
             return true;
-         */
         return false;
     }
 }
