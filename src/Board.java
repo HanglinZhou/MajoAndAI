@@ -58,7 +58,11 @@ public class Board {
         this.actionTaken = actionTaken;
     }
 
-    List<AIAction> computeValidActions() {
+    /**
+     * In the order of indices of "vehicles", compute all valid actions for one vehicle.
+     * @return All valid actions for a given board.
+     */
+    public List<AIAction> computeValidActions() {
         //todo
         return new ArrayList<>();
     }
@@ -81,5 +85,4 @@ public class Board {
         return false;
     }
 
-    //todo: comparator
 }

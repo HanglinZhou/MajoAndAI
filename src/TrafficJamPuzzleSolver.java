@@ -4,9 +4,11 @@ public class TrafficJamPuzzleSolver {
 
     public static void main(String[] args) {
         int[][] boardData = null;
+
         int[][] doorCoord = readInput(boardData);
-        TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicOverlap();
-        TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicRemove();
+
+        TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicRemove();
+        TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
 
 
         AI ai_1 = new AI(boardData, doorCoord, h1); //initialize
@@ -28,6 +30,7 @@ public class TrafficJamPuzzleSolver {
     }
 
     public static int[][] readInput(int[][] boardData) {
+        //todo
         return null;
     }
 }

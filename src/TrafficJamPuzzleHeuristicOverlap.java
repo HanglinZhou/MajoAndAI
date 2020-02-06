@@ -1,4 +1,5 @@
 public class TrafficJamPuzzleHeuristicOverlap implements TrafficJamPuzzleHeuristic {
+
     /*
     f(currBoard) = number of overlaps after moving all the vehicles blocking the red car
     from reaching the door for a minimum number of steps
