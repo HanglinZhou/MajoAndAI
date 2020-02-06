@@ -48,5 +48,39 @@ public class Vehicle {
 
     }
 
+    public void move(Direction dir) {
+        switch (dir) {
+            case LEFT:
+                moveLeft();
+                break;
+            case RIGHT:
+                moveRight();
+                break;
+            case UP:
+                moveUp();
+                break;
+            case DOWN:
+                moveDown();
+                break;
+            default:
+                break;
+        }
+    }
+    private void moveLeft() {
+        coord[1]--;
+    }
+
+    private void moveRight() {
+        coord[1]++;
+    }
+
+    private void moveUp() {
+        coord[0]--;
+    }
+
+    private void moveDown() {
+        coord[0]++;
+    }
+
 
 }

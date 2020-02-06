@@ -59,7 +59,6 @@ public class TrafficJamPuzzleSolver {
      * @return a 2d array as the board, the door's column is stored at the last cell in the 2d array
      */
     public static int[][] readInput() throws IOException {
-        //todo
         int[][] boardData = null;
         int doorCoord = 0;
         char blank = 'x';
