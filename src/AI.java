@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 public class AI {
-    Vehicle redCar;
-    int doorColumn; //door row = 0
     Board initialBoard;
     HashSet<Board> visitedBoards;
     PriorityQueue<Board> frontier;
@@ -78,9 +76,14 @@ public class AI {
      * @return the successor board (state) as the result of the successor function
      */
     private Board successorFunction(Board currBoard, AIAction action) {
-        //assign computed f(n) in here
         //todo
-        return null;
+        //construct successor board
+        Board successor = new Board(currBoard, action);
+
+        //compute cost f(n) = g(n) + h(n)
+        int cost = currBoard.getCost() + 1 + myHeuristic.computeEstCost(successor, successor.getRedCar());
+        successor.setCost(cost);
+        return successor;
     }
 
     /**
@@ -91,7 +94,7 @@ public class AI {
      */
     private boolean passGoalTest(Board currBoard) {
         //don't need to check the column position, the only valid row is 0 or 1 for a car
-        if (redCar.getCoord()[0] < redCar.getLength())
+        if (currBoard.getRedCar().getCoord()[0] < currBoard.getRedCar().getLength())
             return true;
         return false;
     }

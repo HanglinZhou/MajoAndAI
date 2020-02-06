@@ -8,7 +8,7 @@ public class TrafficJamPuzzleSolver {
 
     public static void main(String[] args) throws IOException {
 
-        int[][] boardData = readInput();;
+        int[][] boardData = readInput();
         int doorCoord = boardData[boardData.length-1][boardData.length-1];
 
         if (doorCoord == -1)
@@ -59,7 +59,6 @@ public class TrafficJamPuzzleSolver {
      * @return a 2d array as the board, the door's column is stored at the last cell in the 2d array
      */
     public static int[][] readInput() throws IOException {
-        //todo
         int[][] boardData = null;
         int doorCoord = 0;
         char blank = 'x';
