@@ -41,5 +41,12 @@ public class Vehicle {
         this.coord = coord;
     }
 
+    // returns true if the current vehicle moves vertically
+    public boolean movesVertically() {
+        return (this.getValidDirections().get(0) == Direction.UP ||
+                this.getValidDirections().get(0) == Direction.DOWN);
+
+    }
+
 
 }
