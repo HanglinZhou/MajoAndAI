@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.List;
 
 public class Vehicle {
@@ -46,6 +47,18 @@ public class Vehicle {
         return (this.getValidDirections().get(0) == Direction.UP ||
                 this.getValidDirections().get(0) == Direction.DOWN);
 
+    }
+
+    /**
+     *
+     * @Override
+     */
+    public boolean equals(Object obj) {
+        if (obj instanceof Vehicle) {
+            Vehicle v = (Vehicle) obj;
+            return v.getId() == this.id;
+        }
+        return false;
     }
 
     public void move(Direction dir) {

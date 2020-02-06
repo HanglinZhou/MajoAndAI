@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class Board {
     static int doorColumn; //door row = 0
-    static List<Vehicle> vehicles; //vehicles on this board, index of the vehicle corresponds to its id
+    List<Vehicle> vehicles; //vehicles on this board, index of the vehicle corresponds to its id
     final int blank = -1;
 
     int[][] board;
@@ -20,11 +21,13 @@ public class Board {
         board = new int[boardData.length - 1][boardData.length - 1];
         //initialize board
         for (int i = 0; i < boardData.length - 1; i++) {
-            for (int j = 0; j < boardData[0].length - 1; j++)
+            for (int j = 0; j < boardData[0].length; j++)
                 board[i][j] = boardData[i][j];
         }
 
-        doorColumn = boardData[boardData.length-1][boardData.length-1];
+
+        doorColumn = boardData[boardData.length-1][boardData[0].length - 1];
+        vehicles = new ArrayList<>();
 
         boolean sawRedCar = false;
         //iterate through the board, construct vehicles and store all of them
@@ -84,6 +87,7 @@ public class Board {
                 }
 
             }
+
         }
 
         cost = 0;
@@ -99,31 +103,53 @@ public class Board {
     public Board(Board parent, AIAction actionTaken) {
         this.parent = parent;
         this.actionTaken = actionTaken;
-        this.board = parent.getBoard().clone();
+        this.board = new int[parent.getBoard().length][parent.getBoard().length];
+
+        for (int r = 0; r < parent.getBoard().length; r++) {
+            for (int c = 0; c < parent.getBoard().length; c++) {
+                this.board[r][c] = parent.getBoard()[r][c];
+            }
+        }
+        this.vehicles = new ArrayList<>();
+
+        for (Vehicle v : parent.vehicles) {
+            Vehicle newV = new Vehicle(v.getId(), v.getCoord().clone(), v.getLength(), v.validDirections);
+            this.vehicles.add(newV);
+        }
 
         //update board and move the vehicle
-        Vehicle v = actionTaken.getVehicle();
+        int vehicleID = actionTaken.getVehicle().getId();
+        Vehicle v = this.vehicles.get(vehicleID);
         Vehicle.Direction dir = actionTaken.getDirection();
-        v.move(dir);
+        //System.out.printf("%s is being moved to %s\n", vehicleID, dir);
 
-        int[] coordV = v.getCoord();
+        int[] coordV = new int[2];
+        coordV[0] = v.getCoord()[0];
+        coordV[1] = v.getCoord()[1];
+
+        v.move(dir);
 
         switch (dir) {
             case LEFT:
-                board[coordV[0]][coordV[1]] = v.getId();
-                board[coordV[0]][coordV[1]+v.getLength()] = blank;
+                //this.printBoard();
+                //System.out.println("left - id: " + v.getId() + ", coord: " + coordV[0] + ", " + coordV[1]);
+                board[coordV[0]][coordV[1]-1] = v.getId();
+                board[coordV[0]][coordV[1]+v.getLength()-1] = blank;
                 break;
             case RIGHT:
-                board[coordV[0]][coordV[1]] = v.getId();
-                board[coordV[0]][coordV[1]-v.getLength()] = blank;
+                //System.out.println("right - id: " + v.getId() + ", coord: " + coordV[0] + ", " + coordV[1]);
+                board[coordV[0]][coordV[1]+v.getLength()] = v.getId();
+                board[coordV[0]][coordV[1]] = blank;
                 break;
             case UP:
-                board[coordV[0]][coordV[1]] = v.getId();
-                board[coordV[0]+v.getLength()][coordV[1]] = blank;
+                //System.out.println("up - id: " + v.getId() + ", coord: " + coordV[0] + ", " + coordV[1]);
+                board[coordV[0]-1][coordV[1]] = v.getId();
+                board[coordV[0]+v.getLength() - 1][coordV[1]] = blank;
                 break;
             case DOWN:
-                board[coordV[0]][coordV[1]] = v.getId();
-                board[coordV[0]-v.getLength()][coordV[1]] = blank;
+                //System.out.println("down - id: " + v.getId() + ", coord: " + coordV[0] + ", " + coordV[1]);
+                board[coordV[0] + v.getLength()][coordV[1]] = v.getId();
+                board[coordV[0]][coordV[1]] = blank;
                 break;
             default:
                 break;
@@ -135,7 +161,7 @@ public class Board {
     public static int getDoorColumn() { return doorColumn; }
 
     // returns the vehicle with id
-    public static Vehicle getVehicle(int id) { return vehicles.get(id); }
+    public Vehicle getVehicle(int id) { return this.vehicles.get(id); }
 
     public int[][] getBoard() {
         return board;
@@ -144,6 +170,7 @@ public class Board {
     public void printBoard() {
         final int GRIDLENGTH = 4;
         int n = this.board.length;
+        System.out.println("board has length " + n);
 
         for (int r = 0; r < n; r++) {
             for (int c = 0; c < (n + 1) * GRIDLENGTH + 2; c++) {
@@ -215,7 +242,57 @@ public class Board {
      */
     public List<AIAction> computeValidActions() {
         //todo
-        return new ArrayList<>();
+
+        List<AIAction> validActions = new ArrayList<>();
+
+        // for each vehicle on the board, check the two grids before and behind the vehicle. If any of those two grids
+        // are currently unoccupied, the vehicle moving into the direction of that unoccupied grid is a valid action.
+        // Then we construct that action described above and add it to the list to be returned
+        int[] vehicleHead = new int[2];
+        int r = 0;
+        int c = 1;
+        int rowFront, rowBack, colFront, colBack;
+
+        for (Vehicle v : vehicles) {
+            vehicleHead = v.getCoord();
+            System.out.printf("id: %s, x: %s, y: %s\n", v.getId(), v.getCoord()[0], v.getCoord()[1]);
+            if (v.movesVertically()) { // check up and down, so row varies while col
+                rowFront = vehicleHead[0] - 1;
+                rowBack = vehicleHead[0] + v.getLength();
+                colFront = vehicleHead[1];
+                colBack = vehicleHead[1];
+            } else { // check left and right, so col varies while row holds const
+                rowFront = vehicleHead[0];
+                rowBack = vehicleHead[0];
+                colFront = vehicleHead[1] - 1;
+                colBack = vehicleHead[1] + v.getLength();
+            }
+            Vehicle.Direction direc;
+            if (rowFront >= 0 && colFront >= 0 && !this.isGridOccupied(rowFront, colFront)) {
+                // if there exists a grid above/to the left of the current vehicle and is unoccupied,
+                // then moving UP/LEFT(according to whether the vehicle moves vertically) is valid
+                if (v.movesVertically())
+                    direc = Vehicle.Direction.UP;
+                else
+                    direc = Vehicle.Direction.LEFT;
+
+                AIAction act = new AIAction(v, direc);
+                validActions.add(act);
+            }
+
+            if (rowBack < board.length && colBack < board.length && !this.isGridOccupied(rowBack, colBack)) {
+                // if there exists a grid down/to the right of the current vehicle and is unoccupied,
+                // then moving DOWN/RIGHT(according to whether the vehicle moves vertically) is valid
+                if (v.movesVertically())
+                    direc = Vehicle.Direction.DOWN;
+                else
+                    direc = Vehicle.Direction.RIGHT;
+                AIAction act = new AIAction(v, direc);
+                validActions.add(act);
+            }
+        }
+
+        return validActions;
     }
 
     // override the hashCode by the deepHash for board, such that

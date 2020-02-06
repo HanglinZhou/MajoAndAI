@@ -9,7 +9,7 @@ public class TrafficJamPuzzleSolver {
     public static void main(String[] args) throws IOException {
 
         int[][] boardData = readInput();
-        int doorCoord = boardData[boardData.length-1][boardData.length-1];
+        int doorCoord = boardData[boardData.length-1][boardData[0].length - 1];
 
         if (doorCoord == -1)
             return;
@@ -20,8 +20,16 @@ public class TrafficJamPuzzleSolver {
             System.out.println();
         }
 
+        TrafficJamPuzzleHeuristic h0 = new TrafficJamPuzzleHeuristicDummy();
         TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicRemove();
         TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
+
+        AI ai_0 = new AI(boardData, h0); //initialize
+        ai_0.initialBoard.printBoard();
+        Board terminalBoard1 = ai_0.AStarSearch();
+        List<AIAction> solution0 = ai_0.buildPath(terminalBoard1);
+        System.out.println(solution0.size());
+        //ai_1.printPath(solution1);
 
 
         AI ai_1 = new AI(boardData, h1); //initialize
@@ -82,7 +90,7 @@ public class TrafficJamPuzzleSolver {
                     return null;
                 }
 
-                boardData = new int[n][n];
+                boardData = new int[n + 1][n];
                 line = reader.readLine();
                 doorCoord = Integer.parseInt(line);
 
@@ -101,7 +109,7 @@ public class TrafficJamPuzzleSolver {
             rowNum++;
 
         }
-        boardData[boardData.length-1][boardData.length-1] = doorCoord;
+        boardData[boardData.length-1][boardData.length-2] = doorCoord;
 
         return boardData;
     }
