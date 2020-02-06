@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -62,17 +64,25 @@ public class Board {
      */
     public List<AIAction> computeValidActions() {
         //todo
+        return new ArrayList<>();
     }
 
-
+    // override the hashCode by the deepHash for board, such that
+    // two Board objects w/ same board field has the same hashCode
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Arrays.deepHashCode(this.getBoard());
     }
 
+    // override the equals method such that two Board objects w/ same board
+    // field are treated as the same object
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj);
+        if (obj instanceof Board) {
+          Board bd = (Board)obj;
+          return (Arrays.deepEquals(bd.getBoard(), this.getBoard()));
+        } 
+        return false;
     }
 
 }

@@ -4,7 +4,9 @@ public class TrafficJamPuzzleSolver {
 
     public static void main(String[] args) {
         int[][] boardData = null;
+
         int[][] doorCoord = readInput(boardData);
+
         TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicRemove();
         TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
 
