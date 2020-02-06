@@ -131,12 +131,12 @@ public class AI {
      * @return the successor board (state) as the result of the successor function
      */
     private Board successorFunction(Board currBoard, AIAction action) {
-        //todo
         //construct successor board
         Board successor = new Board(currBoard, action);
 
         //compute cost f(n) = g(n) + h(n)
-        int cost = currBoard.getCost() + 1 + myHeuristic.computeEstCost(successor, successor.getRedCar());
+        successor.setActualCost(currBoard.getActualCost() + 1);
+        int cost = currBoard.getActualCost() + 1 + myHeuristic.computeEstCost(successor, successor.getRedCar());
         successor.setCost(cost);
         return successor;
     }
