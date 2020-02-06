@@ -1,11 +1,6 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class AI {
-    Vehicle redCar;
-    int doorColumn; //door row = 0
     Board initialBoard;
     HashSet<Board> visitedBoards;
     PriorityQueue<Board> frontier;
@@ -14,12 +9,22 @@ public class AI {
     /**
      * Constructor of the AI object, where all initializations take place.
      *
-     * @param boardData
-     * @param doorCoord
+     * @param boardData raw data from reading input
+     * @param h the heuristic to use
      */
-    public AI(int[][] boardData, int doorCoord, TrafficJamPuzzleHeuristic h) {
-        //todo
+    public AI(int[][] boardData, TrafficJamPuzzleHeuristic h) {
         frontier = new PriorityQueue<>((o1, o2) -> o1.getCost() - o2.getCost());
+        myHeuristic = h;
+        visitedBoards = new HashSet<>();
+
+        // initiate the initial state/board, put it into the frontier
+        Board initalBoard = new Board(boardData);
+        frontier.add(initalBoard);
+
+        System.out.println("AI initialized, board printing");
+        initalBoard.printBoard();
+
+
     }
 
     /**
@@ -58,16 +63,44 @@ public class AI {
      */
     public List<AIAction> buildPath(Board terminalBoard) {
         //todo
-        return new ArrayList<>();
+        Stack<Board> reverseBoards = new Stack<>();
+        Stack<AIAction> reversedPath = new Stack<>();
+
+        List<AIAction> path = new ArrayList<>();
+        Board currentBoard = terminalBoard;
+        reverseBoards.push(currentBoard);
+
+        // from the terminal board, continue tracing back to the parent, until the initial state is reached,
+        // and add the actions accordingly to reconstruct the path chosen
+        while (currentBoard.parent != null) {
+            // while the current board is not the initial state/board, add the action taken to reach current board
+            currentBoard = currentBoard.parent;
+            reverseBoards.push(currentBoard);
+        }
+        printPath(reverseBoards, path);
+
+        return path;
     }
 
     /**
-     * Print.
+     * Print out the path according the input List of actions
      *
-     * @param solution
+     * @param reversedBoards
+     * @param path List of AIActions to be filled in
      */
-    public void printPath(List<AIAction> solution) {
+    private void printPath(Stack<Board> reversedBoards, List<AIAction> path) {
         //todo
+
+        // print initial board
+        Board currentBoard = reversedBoards.pop();
+        currentBoard.printBoard();
+
+        while (!reversedBoards.isEmpty()) {
+            currentBoard = reversedBoards.pop();
+
+            path.add(currentBoard.getActionTaken());
+            path.get(path.size() - 1).printAIAction();
+        }
     }
 
     /**
@@ -91,8 +124,10 @@ public class AI {
      */
     private boolean passGoalTest(Board currBoard) {
         //don't need to check the column position, the only valid row is 0 or 1 for a car
-        if (redCar.getCoord()[0] < redCar.getLength())
+        /*
+        if (redCar.getCoord()[0] == 0)
             return true;
+         */
         return false;
     }
 }

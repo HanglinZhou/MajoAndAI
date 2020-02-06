@@ -8,7 +8,7 @@ public class TrafficJamPuzzleSolver {
 
     public static void main(String[] args) throws IOException {
 
-        int[][] boardData = readInput();;
+        int[][] boardData = readInput();
         int doorCoord = boardData[boardData.length-1][boardData.length-1];
 
         if (doorCoord == -1)
@@ -24,20 +24,20 @@ public class TrafficJamPuzzleSolver {
         TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
 
 
-        AI ai_1 = new AI(boardData, doorCoord, h1); //initialize
+        AI ai_1 = new AI(boardData, h1); //initialize
         //timer
 
-        Board terminalBoard1 = ai_1.AStarSearch();
-        List<AIAction> solution1 = ai_1.buildPath(terminalBoard1);
-        ai_1.printPath(solution1);
+        //Board terminalBoard1 = ai_1.AStarSearch();
+        //List<AIAction> solution1 = ai_1.buildPath(terminalBoard1);
+        //ai_1.printPath(solution1);
 
         //timer end
-        AI ai_2 = new AI(boardData, doorCoord, h2); //initialize
+        AI ai_2 = new AI(boardData, h2); //initialize
         //timer
 
-        Board terminalBoard2 = ai_2.AStarSearch();
-        List<AIAction> solution2 = ai_2.buildPath(terminalBoard2);
-        ai_2.printPath(solution2);
+        //Board terminalBoard2 = ai_2.AStarSearch();
+        //List<AIAction> solution2 = ai_2.buildPath(terminalBoard2);
+        //ai_2.printPath(solution2);
         //timer end
 
     }

@@ -1,9 +1,13 @@
 public class TrafficJamPuzzleHeuristicOverlap implements TrafficJamPuzzleHeuristic {
     Board board;
 
-    /* f(currBoard) = number of overlaps after moving all the vehicles blocking the red car
-       from reaching the door for a minimum number of steps
-       @Override
+    /**
+     *
+     * @param board
+     * @param redCar
+     * @return number of overlaps after moving all the vehicles blocking the red car
+     *        from reaching the door for a minimum number of steps
+     * @Override
      */
     public int computeEstCost(Board board, Vehicle redCar) {
         int totalEstCost = 0;
@@ -35,14 +39,16 @@ public class TrafficJamPuzzleHeuristicOverlap implements TrafficJamPuzzleHeurist
             }
         }
 
-        return 0;
+        return totalEstCost;
     }
 
-    /* Returns the sum of the number of overlapping grids after moving the specified vehicle to the
-       specified direction and the number of moves to take; returns infinity if move is invalid
-       @vehicle: vehicle to be moved
-       @direction: direction to be moved towards
-       @numGridsToMove: number of grids to move towards direction
+    /**
+     *
+     * @param vehicle: vehicle to be moved
+     * @param direction: direction to be moved towards
+     * @param numGridsToMove: number of grids to move towards direction
+     * @return the sum of the number of overlapping grids after moving the specified vehicle to the
+     * specified direction and the number of moves to take; returns infinity if move is invalid
      */
     private int estCostOfCurrMove(Vehicle vehicle, Vehicle.Direction direction, int numGridsToMove) {
         if (numGridsToMove == Integer.MAX_VALUE)  // if invalid move
@@ -68,10 +74,12 @@ public class TrafficJamPuzzleHeuristicOverlap implements TrafficJamPuzzleHeurist
         return result;
     }
 
-    /* Returns the min number of grids to be moved for the current vehicle to get
-       out of the way in order for the red car to reach the door, to the specified direction
-       @vehicle: vehicle to be moved
-       @direction: direction to be moved towards
+    /**
+     *
+     * @param vehicle: vehicle to be moved
+     * @param direction: direction to be moved towards
+     * @return the min number of grids to be moved for the current vehicle to get
+     *        out of the way in order for the red car to reach the door, to the specified direction
      */
     private int numOfGridsToMove(Vehicle vehicle, Vehicle.Direction direction) {
         int numGridsLeftOfDoorCol = Board.getDoorColumn() - vehicle.getCoord()[1];

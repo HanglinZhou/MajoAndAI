@@ -8,6 +8,13 @@ public class AIAction {
         this.direction = direction;
     }
 
+    public void printAIAction() {
+        String result = "|\n|\n|\n" +
+                "|  (" + vehicle.getId() + ", " + vehicle.getValidDirections() + ")" +
+                "|\n|\n|\n|/";
+        System.out.println(result);
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }

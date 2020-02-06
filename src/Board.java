@@ -14,6 +14,8 @@ public class Board {
     Board parent; //the state/board from which this board is reached
     AIAction actionTaken; //how I was born
 
+
+
     public Board(int[][] boardData) {
         //todo
     }
@@ -28,6 +30,33 @@ public class Board {
     }
 
     public boolean isGridOccupied(int r, int c) { return !(this.board[r][c] == -1); }
+
+    public void printBoard() {
+        final int GRIDLENGTH = 4;
+        int n = this.board.length;
+
+        for (int r = 0; r < n; r++) {
+            for (int c = 0; c < (n + 1) * GRIDLENGTH + 2; c++) {
+                System.out.print('-');
+            }
+            System.out.println();
+            for (int i = 0; i < n; i++) {
+                String gridFill = "";
+                if (this.board[r][i] != -1) {
+                    gridFill = " " + this.board[r][i];
+                }
+                while (gridFill.length() < GRIDLENGTH) {
+                    gridFill += ' ';
+                }
+                System.out.print('|' + gridFill);
+            }
+            System.out.println('|');
+        }
+        for (int c = 0; c < (n + 1) * GRIDLENGTH + 2; c++) {
+            System.out.print('-');
+        }
+        System.out.println();
+    }
 
     public void setBoard(int[][] board) {
         this.board = board;
