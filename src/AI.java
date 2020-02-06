@@ -6,6 +6,17 @@ public class AI {
     PriorityQueue<Board> frontier;
     TrafficJamPuzzleHeuristic myHeuristic;
 
+    int numBoardsExplored = 0;
+    int numBoardsVisited = 0;
+
+    public int getNumBoardsExplored() {
+        return numBoardsExplored;
+    }
+
+    public int getNumBoardsVisited() {
+        return numBoardsVisited;
+    }
+
     /**
      * Constructor of the AI object, where all initializations take place.
      *
@@ -19,11 +30,6 @@ public class AI {
 
         // initiate the initial state/board
         this.initialBoard = new Board(boardData);
-        //frontier.add(initalBoard);
-
-        System.out.println("AI initialized, board printing");
-        //initalBoard.printBoard();
-
 
     }
 
@@ -36,7 +42,7 @@ public class AI {
         //todo
         frontier.offer(initialBoard);
         while (!frontier.isEmpty()) {
-            System.out.println("frontier size " + frontier.size());
+            //System.out.println("frontier size " + frontier.size());
             Board currBoard = frontier.poll();
             // currBoard.printBoard();
 
@@ -45,24 +51,15 @@ public class AI {
 
             if (!visitedBoards.contains(currBoard)) {
                 visitedBoards.add(currBoard);
+                numBoardsVisited++;
                 //currBoard.printBoard();
                 for (AIAction a : currBoard.computeValidActions()) {
                     //a.printAIAction();
                     Board successor = successorFunction(currBoard, a);
                     //currBoard.printBoard();
                     if (!visitedBoards.contains(successor)) {
-                        for (Board b : visitedBoards) {
-                            /*
-                            if (b.equals(successor)) {
-                                b.printBoard();
-                                System.out.println("EQUAL");
-                                successor.printBoard();
-                                System.out.println("+++++++++++++++++++++++++++++");
-
-                            }
-                            */
-                        }
                         frontier.offer(successor);
+                        numBoardsExplored++;
                     }
                 }
 

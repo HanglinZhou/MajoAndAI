@@ -18,7 +18,6 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
 
         int[][] actualBoard = board.getBoard();
         for (int row = 0; row < rowOfRedCar; row++) {
-
             int id = this.board.getBoard()[row][Board.getDoorColumn()];
             if (id != -1) {  // if that grid is occupied
                 Vehicle vehicle = this.board.getVehicle(id);
@@ -46,6 +45,7 @@ public class TrafficJamPuzzleHeuristicRemove implements TrafficJamPuzzleHeuristi
         int[] vCoord = vehicle.getCoord();
         int nextVId;
 
+        System.out.printf("car %s w/ coord: %s, %s\n", vehicle.getId(), vCoord[0], vCoord[1]);
         if (dir == Vehicle.Direction.UP || dir == Vehicle.Direction.DOWN)
             return 0;
         //base case: wall || blank

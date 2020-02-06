@@ -24,11 +24,13 @@ public class TrafficJamPuzzleSolver {
         TrafficJamPuzzleHeuristic h1 = new TrafficJamPuzzleHeuristicRemove();
         TrafficJamPuzzleHeuristic h2 = new TrafficJamPuzzleHeuristicOverlap();
 
-        AI ai_0 = new AI(boardData, h1); //initialize
-        ai_0.initialBoard.printBoard();
+        AI ai_0 = new AI(boardData, h2); //initialize
+        //ai_0.initialBoard.printBoard();
         Board terminalBoard1 = ai_0.AStarSearch();
         List<AIAction> solution0 = ai_0.buildPath(terminalBoard1);
         System.out.println(solution0.size());
+        System.out.println("numBoardsExplored: " + ai_0.getNumBoardsExplored());
+        System.out.println("numBoardsVisited: " + ai_0.getNumBoardsVisited());
         //ai_1.printPath(solution1);
 
 
