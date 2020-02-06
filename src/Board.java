@@ -6,8 +6,7 @@ import java.util.List;
  * The snapshot of the current parking lot/ the puzzle board, which is also the state of our search space.
  */
 public class Board {
-
-
+    int doorColumn; //door row = 0
     int[][] board;
     List<Vehicle> vehicles; //vehicles on this board, index of the vehicle corresponds to its id
     int cost; //f(n) = g(n)+h(n)
@@ -17,6 +16,8 @@ public class Board {
     public Board(int[][] boardData) {
         //todo
     }
+
+    public int getDoorColumn() { return doorColumn; }
 
     public int[][] getBoard() {
         return board;
@@ -29,6 +30,9 @@ public class Board {
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
+
+    // returns the vehicle with id
+    public Vehicle getVehicle(int id) { return vehicles.get(id); }
 
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
