@@ -2,6 +2,9 @@ public class AI {
     int hMinimaxDepth;
     boolean playWithWhitePieces;
     Board initialBoard;
+    ExplorePolicy policy;
+    int numBoardsVisited = 0;
+
 
     /***
      * Initialize the initial board and all other data field.
@@ -9,11 +12,11 @@ public class AI {
      * @param playWithWhitePieces
      * @param boardData
      */
-    public AI(int hMinimaxDepth, boolean playWithWhitePieces, char[][] boardData) {
-        //todo
+    public AI(int hMinimaxDepth, boolean playWithWhitePieces, char[][] boardData, ExplorePolicy policy) {
         this.hMinimaxDepth = hMinimaxDepth;
         this.playWithWhitePieces = playWithWhitePieces;
         initialBoard = new Board(boardData);
+        this.policy = policy;
     }
 
     /***

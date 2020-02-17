@@ -1,9 +1,9 @@
 import java.util.Arrays;
 
-public class Piece {
+public abstract class Piece {
 
     Coord coord;
-    String type;
+    String typename;
 
     /*  Valid directions (represented by a unit vector) for a piece:
         e.g. The king (k) moves one square in any direction, so validMoveDirections is:
@@ -21,12 +21,9 @@ public class Piece {
     boolean isWhitePiece;
 
 
-    public Piece(Coord coord, String type, int[][] validMoveDirections, int validMoveRange, int value, boolean isWhitePiece) {
+    public Piece(Coord coord, String type, boolean isWhitePiece) {
         this.coord = coord;
-        this.type = type;
-        this.validMoveDirections = validMoveDirections;
-        this.validMoveRange = validMoveRange;
-        this.value = value;
+        this.typename = type;
         this.isWhitePiece = isWhitePiece;
     }
 
@@ -38,12 +35,12 @@ public class Piece {
         this.coord = coord;
     }
 
-    public String getType() {
-        return type;
+    public String getTypename() {
+        return typename;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypename(String typename) {
+        this.typename = typename;
     }
 
     public int[][] getValidMoveDirections() {
@@ -82,7 +79,7 @@ public class Piece {
     public String toString() {
         return "Piece{" +
                 "coord=" + coord +
-                ", type='" + type + '\'' +
+                ", typename='" + typename + '\'' +
                 ", validMoveDirections=" + Arrays.toString(validMoveDirections) +
                 ", validMoveRange=" + validMoveRange +
                 ", value=" + value +

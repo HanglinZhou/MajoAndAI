@@ -5,9 +5,12 @@ public class Board {
 
     HashMap<Coord, Piece> whiteTerritory;
     HashMap<Coord, Piece> blackTerritory;
-
+    Board parentBoard;
+    Piece movedPiece;
     int alpha;
     int beta;
+    int score; //value/score
+    int numAllValidMoves;//todo
 
     /***
      * Constructor for the initial board.
@@ -17,8 +20,11 @@ public class Board {
     public Board(char[][] boardData) {
         whiteTerritory = new HashMap<>();
         blackTerritory = new HashMap<>();
-        alpha = 0;
-        beta = 0;
+        alpha = Integer.MIN_VALUE;
+        beta = Integer.MAX_VALUE;
+        parentBoard = null;
+        movedPiece = null;
+        score = Integer.MIN_VALUE;
         //todo
 
     }
@@ -33,16 +39,21 @@ public class Board {
         //todo
         whiteTerritory = new HashMap<>();
         blackTerritory = new HashMap<>();
+        this.parentBoard = parentBoard;
         alpha = 0;
         beta = 0;
+        //movedPiece
 
 
     }
 
     /***
      * Compute and return all valid moves for the given board.
+     * Iterate myTerritory,
+     * for each piece, return range, dir
+     *  based on current board and the coord of this piece, compute all valid moves for this piece
      *
-     * @return
+     * @return all valid moves for all pieces
      */
     public List<Move> computeAllValidMoves() {
         //todo

@@ -9,11 +9,19 @@ public class MoveDecider {
         char[][] boardData = readInput();
         boolean playWithWhitePiece = true;
         //TODO: depth is hardcoded here, it can be easily changed to be a input value, default to play with white piece
+        ExplorePolicy policyDist = new ExplorePolicyDistance();
+        ExplorePolicy policyValue = new ExplorePolicyValue();
+        AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
+        AI aiValue = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyValue); //construct AI object with raw board data
 
-        AI ai = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData); //construct AI object with raw board data
-        Move move = ai.runMinimax();
-        char[][] newBoardData = ai.getNewBoardAfterMove(move);
-        printOutput(move, newBoardData);
+        Move moveDist = aiDist.runMinimax();
+        Move moveValue = aiValue.runMinimax();
+
+        char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
+        char[][] newBoardDataValue = aiDist.getNewBoardAfterMove(moveValue);
+
+        printOutput(moveDist, newBoardDataDist);
+        printOutput(moveValue, newBoardDataValue);
 
     }
 
