@@ -4,6 +4,7 @@ public class AI {
     Board initialBoard;
     ExplorePolicy policy;
     int numBoardsVisited = 0;
+    char[][] initialBoardData;
 
 
     /***
@@ -17,6 +18,7 @@ public class AI {
         this.playWithWhitePieces = playWithWhitePieces;
         initialBoard = new Board(boardData);
         this.policy = policy;
+        this.initialBoardData = boardData;
     }
 
     /***
@@ -36,10 +38,34 @@ public class AI {
      * @return a char[][] representing the new board.
      */
     public char[][] getNewBoardAfterMove(Move move) {
-        //todo
-        char[][] newBoard = null;
-        return newBoard;
+        //todo: test
+        char[][] newBoard = this.initialBoardData;
+        Piece p = move.getPiece();
+        Coord currCoord = p.getCoord();
+        Coord newCoord = move.getNewCoord();
 
+        // change curr Coord to blank, since the piece is moved away
+        newBoard[currCoord.getRow()][currCoord.getCol()] = '_';
+
+        // get marker of curr piece
+        char marker;
+        if (p.getTypename().equals("knight")) {
+            marker = 'n';
+        } else {
+            marker = p.getTypename().charAt(0);
+        }
+
+        if (p.isWhitePiece()) {
+            marker = Character.toUpperCase(marker);
+        } else {
+            marker = Character.toLowerCase(marker);
+        }
+
+        // change destination coord to marker of moved piece
+        newBoard[newCoord.getRow()][newCoord.getCol()] = marker;
+
+
+        return newBoard;
     }
 
     /***

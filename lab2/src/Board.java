@@ -13,6 +13,7 @@ public class Board {
     int beta;
     int score; //value/score
     int numAllValidMoves;
+    Coord kingCoord; // keep track of king Coord
 
     /***
      * Constructor for the initial board.
@@ -169,16 +170,20 @@ public class Board {
         List<Move> validMoves = new ArrayList<>();
 
         HashMap<Coord, Piece> myTerritory;
+        HashMap<Coord, Piece> enemyTerritory;
         if (isWhitePlaying) {
             myTerritory = this.whiteTerritory;
+            enemyTerritory = this.blackTerritory;
         } else {
             myTerritory = this.blackTerritory;
+            enemyTerritory = this.whiteTerritory;
         }
 
-        // todo: king
         // for each coord, get the piece and all valid moves for that piece
         for (Coord coord : myTerritory.keySet()) {
             Piece p = myTerritory.get(coord);
+            // for each direction vector v of p, and each scalar multiple c of the vector,
+            // check whether currCoord + v*c is valid move, and add all valid moves
             for (int[] dir : p.getValidMoveDirections()) {
                 for (int c = 1; c <= p.getValidMoveRange(); c++) {
                     // compute destination coord by adding (scalar * direction) to curr coord
@@ -187,11 +192,14 @@ public class Board {
 
                     Coord destCoord = new Coord(newRow, newCol);
                     Move newMove = new Move(p, destCoord);
-                    if (isMoveValid(newMove, myTerritory)) {
+
+                    if (isMoveValid(newMove, isWhitePlaying)) {
                         // if move valid, add move
                         validMoves.add(newMove);
+                    } else {
+                        // if a move is not valid, stop in moving in this direction
+                        break;
                     }
-
                 }
             }
         }
@@ -207,26 +215,75 @@ public class Board {
      * Detemine if the move is valid.
      * @return
      */
-    private boolean isMoveValid(Move move, HashMap<Coord, Piece> myTerritory) {
-        //todo
+    private boolean isMoveValid(Move move, boolean isWhitePlaying) {
+        //todo: king
         Piece p = move.getPiece();
         Coord c = move.getNewCoord();
 
-        // if out of range of the board, return false
-        if (c.isOutOfRange())
-            return false;
+        HashMap<Coord, Piece> myTerritory;
+        HashMap<Coord, Piece> enemyTerritory;
+        Piece ownKing;
 
-        // if not out of range:
-        // for each direction vector, and each scalar multiple of the vector
-        // whether there exists a piece of own side that is blocking the way
-        if (myTerritory.get(c) != null) {
-            // if a piece of own side is blocking, stop moving in the curr direc
-            break;
+        if (isWhitePlaying) {
+            myTerritory = this.whiteTerritory;
+            enemyTerritory = this.blackTerritory;
+            ownKing = myTerritory.get(kingWhite);
         } else {
-            validMoves.add(new Move(p, destCoord));
+            myTerritory = this.blackTerritory;
+            enemyTerritory = this.whiteTerritory;
+            ownKing = myTerritory.get(kingBlack);
         }
 
-        return valid;
+        // if out of range of the board, or coord occupied by own side, return false
+        if (c.isOutOfRange() || myTerritory.get(c) != null)
+            return false;
+
+        // if current move exposes own king to be attacked by enemy, return false
+        for (Coord enemyCoord : enemyTerritory.keySet()) {
+            if (ifAttacking(enemyTerritory.get(enemyCoord), ownKing)) {
+                return false;
+            }
+        }
+
+
+        return true;
+    }
+
+
+    /***
+     * Determine if attacker is attacking attackee
+     * @return true if attacker is attacking attackee
+     */
+    private boolean ifAttacking(Piece attacker, Piece attackee) {
+        HashMap<Coord, Piece> myTerritory;
+        HashMap<Coord, Piece> enemyTerritory;
+        if (attackee.isWhitePiece()) {
+            myTerritory = whiteTerritory;
+            enemyTerritory = blackTerritory;
+        } else {
+            myTerritory = blackTerritory;
+            enemyTerritory = whiteTerritory;
+        }
+
+        int currRow = attacker.getCoord().getRow();
+        int currCol = attacker.getCoord().getCol();
+
+        // for each enemy piece, check whether a piece is attacking king
+        for (int[] direc : attacker.getValidMoveDirections()) {
+            for (int c = 1; c <= attacker.getValidMoveRange(); c++) {
+                Coord newCoord = new Coord(currRow + c * direc[0], currCol + c * direc[1]);
+
+                // if attacks attackee, returns true
+                if (newCoord.equals(attackee.getCoord()))
+                    return true;
+
+                // if attack is out of range of board, or blocked by other piece than attackee, try another direction
+                if (newCoord.isOutOfRange() || myTerritory.get(newCoord) != null || enemyTerritory.get(newCoord) != null) {
+                    break;
+                }
+            }
+        }
+        return false;
     }
 
 }
