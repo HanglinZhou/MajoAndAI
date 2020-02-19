@@ -97,4 +97,18 @@ public abstract class Piece {
                 ", isWhitePiece=" + isWhitePiece +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        // check if o is an instance of Coord or not
+        if (!(o instanceof Piece)) {
+            return false;
+        }
+
+        Piece p = (Piece) o;
+
+        return (this.typename == p.getTypename()) &&
+               (this.pieceId == p.getPieceId() &&
+               (this.isWhitePiece == p.isWhitePiece()));
+    }
 }

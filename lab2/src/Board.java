@@ -109,6 +109,15 @@ public class Board {
         whiteTerritory = deepCloneAndSetMovedPiece(parentBoard.getWhiteTerritory(), move);
         blackTerritory = deepCloneAndSetMovedPiece(parentBoard.getBlackTerritory(), move);
 
+        // remove the captured piece from enemy territory
+        if (move.getPiece().isWhitePiece()) {
+            if (blackTerritory.containsKey(move.getNewCoord()))
+                blackTerritory.remove(move.getNewCoord());
+        } else {
+            if (whiteTerritory.containsKey(move.getNewCoord()))
+                whiteTerritory.remove(move.getNewCoord());
+        }
+
         //movedPiece
         Piece pieceInParentTerritory = move.getPiece();
         Coord newCoord = move.getNewCoord();
@@ -198,13 +207,10 @@ public class Board {
         List<Move> validMoves = new ArrayList<>();
 
         HashMap<Coord, Piece> myTerritory;
-        HashMap<Coord, Piece> enemyTerritory;
         if (isWhitePlaying) {
             myTerritory = this.whiteTerritory;
-            enemyTerritory = this.blackTerritory;
         } else {
             myTerritory = this.blackTerritory;
-            enemyTerritory = this.whiteTerritory;
         }
 
         // for each coord, get the piece and all valid moves for that piece
@@ -219,9 +225,13 @@ public class Board {
                     int newCol = p.getCoord().getCol() + c * dir[1];
 
                     Coord destCoord = new Coord(newRow, newCol);
-                    Move newMove = new Move(p, destCoord);
+                    // if new coord go out of the boarder of board, stop in current direction
+                    if (destCoord.isOutOfRange())
+                        break;
 
-                    if (isMoveValid(newMove, isWhitePlaying)) {
+                    Move newMove = new Move(p, destCoord);
+                    //System.out.printf("new move created, %s %s to %s\n", p.isWhitePiece(), p.getTypename(), destCoord.toString());
+                    if (isMoveValid(newMove)) {
                         // if move valid, add move
                         validMoves.add(newMove);
                     } else {
@@ -241,48 +251,155 @@ public class Board {
     }
     /***
      * Detemine if the move is valid.
-     * @return
+     * @return true if move is valid
      */
-    private boolean isMoveValid(Move move, boolean isWhitePlaying) {
-        //todo: king
-        Piece p = move.getPiece();
-        Coord c = move.getNewCoord();
-
-        HashMap<Coord, Piece> myTerritory;
-        HashMap<Coord, Piece> enemyTerritory;
-        Piece ownKing;
-
-        if (isWhitePlaying) {
-            myTerritory = this.whiteTerritory;
-            enemyTerritory = this.blackTerritory;
-            ownKing = myTerritory.get(kingWhite);
-        } else {
-            myTerritory = this.blackTerritory;
-            enemyTerritory = this.whiteTerritory;
-            ownKing = myTerritory.get(kingBlack);
-        }
-
-        // if out of range of the board, or coord occupied by own side, return false
-        if (c.isOutOfRange() || myTerritory.get(c) != null)
+    private boolean isMoveValid(Move move) {
+        // needs to check 2 things:
+        // 1. whether new coord is blocked by own piece
+        // 2. if not blocked, whether the move will place king in danger
+        if (this.isBlockedByOwnPiece(move) || this.isKingEndangered(move))
             return false;
-
-        // if current move exposes own king to be attacked by enemy, return false
-        for (Coord enemyCoord : enemyTerritory.keySet()) {
-            if (ifAttacking(enemyTerritory.get(enemyCoord), ownKing)) {
-                return false;
-            }
-        }
-
 
         return true;
     }
 
+    /***
+     * Determine whether king is endangered by making current move
+     * @return true if king endangered, false if otherwise
+     */
+    public boolean isKingEndangered(Move move) {
+        Piece myKing;
+        boolean isWhitePlaying = move.getPiece().isWhitePiece();
+        if (isWhitePlaying) {
+            myKing = whiteTerritory.get(kingWhite);
+        } else {
+            myKing = blackTerritory.get(kingBlack);
+        }
+
+        // check after making current move, whether there exists an enemy piece that can immediately attack king
+        Board newBoard = this.makeMove(this, move);
+
+        HashMap<Coord, Piece> enemyTerritory;
+        if (isWhitePlaying) {
+            enemyTerritory = newBoard.getBlackTerritory();
+            for (Coord cd : enemyTerritory.keySet()) {
+                //System.out.printf("white playing, (%s, %s)\n", enemyTerritory.get(cd).getTypename(), cd.toString());
+            }
+        } else {
+            enemyTerritory = newBoard.getWhiteTerritory();
+        }
+
+        for (Coord cd : newBoard.whiteTerritory.keySet()) {
+            //System.out.printf("(%s, %s)\n", newBoard.whiteTerritory.get(cd).getTypename(), cd.toString());
+        }
+
+        // for each enemy piece, check whether the piece attacks king immediately
+        for (Coord c : enemyTerritory.keySet()) {
+            Piece enemyPiece = enemyTerritory.get(c);
+            int row = enemyPiece.getCoord().getRow();
+            int col = enemyPiece.getCoord().getCol();
+
+            // iterate each direction the enemy piece can go
+            for (int[] direc : enemyPiece.getValidMoveDirections()) {
+                // iterate through each range
+                for (int r = 1; r <= enemyPiece.getValidMoveRange(); r++) {
+                    Coord newCoord = new Coord(row + r*direc[0], col + r*direc[1]);
+                    if (newCoord.isOutOfRange())
+                        break;
+
+                    Move mv = new Move(enemyPiece, newCoord);
+                    //System.out.printf("enemy move created, [%s] %s to %s\n", enemyPiece.isWhitePiece, enemyPiece.getTypename(), newCoord.toString());
+                    if (newBoard.getBlockingPiece(mv) != null) {
+                        if (/*newBoard.isOccupiedByEnemyPiece(mv)*/ newBoard.getBlockingPiece(mv).equals(myKing)) {
+                            // if the enemy piece indeed attacks my king, returns true
+                            return true;
+                        } else {
+                            //System.out.printf("enemy [%s] %s is blocking\n at %s\n",
+                                    //enemyTerritory.get(newCoord).isWhitePiece, enemyTerritory.get(newCoord).getTypename(), newCoord.toString());
+                            // enemy stop moving in the current direction if is blocked
+                            break;
+
+                        }
+                    } // if enemy does not come across anything along the way, it keeps moving
+                }
+            }
+        }
+        // if no enemy piece can attack my king, then my king is not endangered
+        return false;
+    }
+
+    /***
+     * Given a move, check whether the destination is blocked by a piece.
+     * @return the piece that is occupying the destination coord; null if not occupied
+     */
+    public Piece getBlockingPiece(Move move) {
+        Coord destination = move.getNewCoord();
+        if (whiteTerritory.get(destination) != null)
+            return whiteTerritory.get(destination);
+        if (blackTerritory.get(destination) != null)
+            return blackTerritory.get(destination);
+
+        // if not occupied
+        return null;
+    }
+
+    /***
+     * Determine whether the destination of current move is blocked by piece of own side
+     * @param move
+     * @return true if destination blocked by own piece, false otherwise
+     */
+    public boolean isBlockedByOwnPiece(Move move) {
+        Piece p = this.getBlockingPiece(move);
+        if (p == null || (p.isWhitePiece() != move.getPiece().isWhitePiece())) {
+            // if not occupied or occupied by piece of other side
+            //System.out.printf("%s not occupied by own side\n", move.getNewCoord().toString());
+            return false;
+        }
+        //System.out.printf("%s occupied by own side [%s]\n", move.getNewCoord().toString(), p.isWhitePiece);
+        return true;
+    }
+
+    /***
+     * Determine whether the destination of current move is occupied by piece of enemy side
+     * @param move
+     * @return true if destination occupied by enemy piece, false otherwise
+     */
+    public boolean isOccupiedByEnemyPiece(Move move) {
+        Piece p = this.getBlockingPiece(move);
+        if (p == null || (p.isWhitePiece() == move.getPiece().isWhitePiece())) {
+            if (p!=null) {
+                /*
+                System.out.print(p.getTypename() + " is blocking, and are both color - ");
+                if (p.isWhitePiece())
+                    System.out.println("white");
+                else
+                    System.out.println("black");
+                 */
+
+            }
+            // if not occupied or occupied by own piece
+            return false;
+        }
+        //System.out.printf("%s occupied by other side [%s] %s\n", move.newCoord.toString(), p.isWhitePiece,p.getTypename());
+        return true;
+    }
+
+    /***
+     * Make the move to the current board
+     * @param currBoard
+     * @param move
+     * @return the new board after making the move
+     */
+    public Board makeMove(Board currBoard, Move move) {
+        return new Board(currBoard, move);
+    }
 
     /***
      * Determine if attacker is attacking attackee
      * @return true if attacker is attacking attackee
-     */
     private boolean ifAttacking(Piece attacker, Piece attackee) {
+
+
         HashMap<Coord, Piece> myTerritory;
         HashMap<Coord, Piece> enemyTerritory;
         if (attackee.isWhitePiece()) {
@@ -296,7 +413,7 @@ public class Board {
         int currRow = attacker.getCoord().getRow();
         int currCol = attacker.getCoord().getCol();
 
-        // for each enemy piece, check whether a piece is attacking king
+        // for the attacker, check whether it is attacking the attackee
         for (int[] direc : attacker.getValidMoveDirections()) {
             for (int c = 1; c <= attacker.getValidMoveRange(); c++) {
                 Coord newCoord = new Coord(currRow + c * direc[0], currCol + c * direc[1]);
@@ -313,6 +430,7 @@ public class Board {
         }
         return false;
     }
+     */
 
     /***
      * Deep clone the territory map.

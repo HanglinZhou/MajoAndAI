@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Coord {
     int row;
     int col;
@@ -26,7 +28,7 @@ public class Coord {
     /* returns whether the coord is out of range of the board)*/
     public boolean isOutOfRange() {
         final int range = 8;
-        return (this.row < 0 || this.row > range || this.col < 0 || this.col > range);
+        return (this.row < 0 || this.row >= range || this.col < 0 || this.col >= range);
     }
 
     @Override
@@ -48,4 +50,10 @@ public class Coord {
 
         return (this.row == c.getRow()) && (this.col == c.getCol());
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
+    }
+
 }
