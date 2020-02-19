@@ -5,13 +5,16 @@ public abstract class Piece {
     Coord coord;
     String typename;
 
+    /* to differentiate different pieces of same type. e.g. rook0, rook1 */
+    int pieceId;
+
     /*  Valid directions (represented by a unit vector) for a piece:
         e.g. The king (k) moves one square in any direction, so validMoveDirections is:
         [[0,1],[0,-1][1,0],[-1,0][1,1],[1,-1],[-1,1],[-1,-1]]
      */
     int[][] validMoveDirections;
 
-    /* How many squares can a piece move? e.g. k: 1
+    /* How many scalar multiple of the direction can a piece move
     */
     int validMoveRange;
 
@@ -25,6 +28,15 @@ public abstract class Piece {
         this.coord = coord;
         this.typename = type;
         this.isWhitePiece = isWhitePiece;
+        this.pieceId = 0;
+    }
+
+    public int getPieceId() {
+        return pieceId;
+    }
+
+    public void setPieceId(int pieceId) {
+        this.pieceId = pieceId;
     }
 
     public Coord getCoord() {

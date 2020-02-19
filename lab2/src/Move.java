@@ -27,8 +27,8 @@ public class Move {
     @Override
     public String toString() {
         return "Move{" +
-                "piece=" + piece +
-                ", newCoord=" + newCoord +
+                "piece=" + piece.getTypename() +
+                ", newCoord=" + newCoord.toString() +
                 '}';
     }
 }
