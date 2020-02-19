@@ -2,8 +2,10 @@ public class PieceBishop extends Piece {
 
     static int id = 0; // keep track of how many bishop has been added;
 
-    public PieceBishop(Coord coord, String type, boolean isWhitePiece) {
-        super(coord, type, isWhitePiece);
+    public PieceBishop(Coord coord, boolean isWhitePiece) {
+        super(coord, isWhitePiece);
+        this.typename = "bishop";
+
         // valid move directions for a bishop
         this.validMoveDirections = new int[4][2];
         this.validMoveDirections[0] = new int[]{1, 1};

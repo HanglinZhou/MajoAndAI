@@ -2,8 +2,10 @@ public class PieceKnight extends Piece {
 
     static int id = 0;  // keep track of how many knights has been added;
 
-    public PieceKnight(Coord coord, String type, boolean isWhitePiece) {
-        super(coord, type, isWhitePiece);
+    public PieceKnight(Coord coord, boolean isWhitePiece) {
+        super(coord, isWhitePiece);
+        this.typename = "knight";
+
         // valid move directions for a knight
         this.validMoveDirections = new int[8][2];
         this.validMoveDirections[0] = new int[]{2, 1};
