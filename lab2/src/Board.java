@@ -2,10 +2,90 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Board {
-
+    final char BLANK = '_';
     HashMap<Coord, Piece> whiteTerritory;
     HashMap<Coord, Piece> blackTerritory;
     Board parentBoard;
+    Piece movedPiece;
+    int alpha;
+    int beta;
+    int score; //value/score
+    int numAllValidMoves;
+
+    /***
+     * Constructor for the initial board.
+     * Initialize all pieces (coord included), add pieces to whiteTerritory, blackTerritory
+     *
+     * @param boardData
+     */
+    public Board(char[][] boardData) {
+        whiteTerritory = new HashMap<>();
+        blackTerritory = new HashMap<>();
+        alpha = Integer.MIN_VALUE;
+        beta = Integer.MAX_VALUE;
+        parentBoard = null;
+        movedPiece = null;
+        score = Integer.MIN_VALUE;
+        //todo
+
+        for (int r = 0; r < boardData.length; r++) {
+            for (int c = 0; c < boardData[r].length; c++) {
+                if (boardData[r][c] != BLANK) {
+                    char pieceChar = boardData[r][c];
+                    Coord coord = new Coord(r,c);
+                    Piece piece;
+                    boolean isWhitePiece = Character.isUpperCase(pieceChar);
+                    pieceChar = Character.toLowerCase(pieceChar);
+                    switch (pieceChar) {
+                        case 'k':
+                            piece = new PieceKing();
+                            break;
+                        case 'q':
+
+                            break;
+                        case 'r':
+
+                            break;
+                        case 'b':
+
+                            break;
+                        case 'n':
+
+                            break;
+                        case 'p':
+
+                            break;
+                        default:
+                            break;
+                    }
+                    if (Character.isLowerCase(boardData[r][c])) {
+
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+    /***
+     * Constructor for other boards based on information from its parent.
+     *
+     * @param parentBoard
+     * @param move
+     */
+    public Board(Board parentBoard, Move move) {
+        //todo
+        whiteTerritory = new HashMap<>();
+        blackTerritory = new HashMap<>();
+        this.parentBoard = parentBoard;
+        alpha = 0;
+        beta = 0;
+        //movedPiece
+
+
+    }
 
     public HashMap<Coord, Piece> getWhiteTerritory() {
         return whiteTerritory;
@@ -69,47 +149,6 @@ public class Board {
 
     public void setNumAllValidMoves(int numAllValidMoves) {
         this.numAllValidMoves = numAllValidMoves;
-    }
-
-    Piece movedPiece;
-    int alpha;
-    int beta;
-    int score; //value/score
-    int numAllValidMoves;//todo
-
-    /***
-     * Constructor for the initial board.
-     *
-     * @param boardData
-     */
-    public Board(char[][] boardData) {
-        whiteTerritory = new HashMap<>();
-        blackTerritory = new HashMap<>();
-        alpha = Integer.MIN_VALUE;
-        beta = Integer.MAX_VALUE;
-        parentBoard = null;
-        movedPiece = null;
-        score = Integer.MIN_VALUE;
-        //todo
-
-    }
-
-    /***
-     * Constructor for other boards based on information from its parent.
-     *
-     * @param parentBoard
-     * @param move
-     */
-    public Board(Board parentBoard, Move move) {
-        //todo
-        whiteTerritory = new HashMap<>();
-        blackTerritory = new HashMap<>();
-        this.parentBoard = parentBoard;
-        alpha = 0;
-        beta = 0;
-        //movedPiece
-
-
     }
 
     /***

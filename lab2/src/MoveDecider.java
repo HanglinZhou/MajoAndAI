@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 
 public class MoveDecider {
     final static int HMINIMAX_DEPTH = 4;
+    final static int BOARD_SIZE = 8;
+
     public static void main(String[] args) throws IOException {
         char[][] boardData = readInput();
         boolean playWithWhitePiece = true;
@@ -44,63 +46,68 @@ public class MoveDecider {
         [‘_’, ‘_’, ‘_’, ‘_’, ‘_’, ‘P’, ‘P’, ‘_’],
         [‘_’, ‘_’, ‘_’, ‘_’, ‘R’, ‘_’, ‘K’, ‘_’]]
      *
-     * @return a 2d array as the board,
+     * @return a 2d array as the board
      */
     public static char[][] readInput() throws IOException {
-        //todo
-        char[][] boardData = null;
-        int doorCoord = 0;
-        char blank = '_';
-
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
 
         String filename = reader.readLine();
         reader = new BufferedReader(new FileReader(filename));
 
-        /*
-        int n;
-        int rowNum = -2; //-2, -1: the first and second line in the file, functions as a flag,
-        // other num as the row num of the input board
-        String line;
-
-        while((line = reader.readLine()) != null) {
-            if (rowNum == -2) {
-                n = Integer.parseInt(line);
-                if (n < 0) {
-                    System.out.println("Invalid parking lot size");
-                    return null;
-                }
-
-                boardData = new int[n + 1][n];
-                line = reader.readLine();
-                doorCoord = Integer.parseInt(line);
-
-                rowNum += 2;
-                continue;
-            }
-
-            String[] row = line.split(" ");
-            for (int i = 0; i < row.length; i++) {
-                if (row[i].charAt(0) == blank)
-                    boardData[rowNum][i] = -1;
-                else
-                    boardData[rowNum][i] = Integer.parseInt(row[i]);
-
-            }
-            rowNum++;
-
+        String line, rawData = "";
+        while ((line = reader.readLine()) != null) {
+            rawData += line;
         }
-        boardData[boardData.length-1][boardData.length-2] = doorCoord;
 
-*/
+        //TODO: check out how Pattern compile() works
+        rawData = rawData.replaceAll("\\[", "");
+        rawData = rawData.replaceAll("\\]", "");
+        rawData = rawData.replaceAll(",", "");
+        rawData = rawData.replaceAll("‘", "");
+        rawData = rawData.replaceAll("’", "");
+        rawData = rawData.replaceAll(" ", "");
+
+        int indexInRawData = 0;
+        char[][] boardData = new char[BOARD_SIZE][BOARD_SIZE];
+
+        for (int r = 0; r < boardData.length; r++) {
+            for (int c = 0; c < boardData[r].length; c++) {
+                boardData[r][c] = rawData.charAt(indexInRawData++);
+            }
+        }
+
+        System.out.println("Initial board after parsing:");
+        for (int r = 0; r < boardData.length; r++) {
+            for (int c = 0; c < boardData[r].length; c++) {
+                System.out.print(boardData[r][c] + " ");
+            }
+            System.out.println();
+        }
         return boardData;
 
     }
 
 
     private static void printOutput(Move move, char[][] newBoardData) {
+        System.out.println("===== Printing result =====: ");
         System.out.println(move.toString());
+        System.out.println("------------------>>>>");
         //todo: print newBoardData
+        System.out.println(changeBoardDataToString(newBoardData));
+
+    }
+
+    //TODO: there might be a repeated print inside Board
+    private static String changeBoardDataToString(char[][] newBoardData) {
+        String ans = "";
+
+        for (char[] row : newBoardData) {
+            for (char c : row)
+                ans += c + " ";
+            ans += "\n";
+        }
+
+        return ans;
     }
 }
