@@ -1,8 +1,9 @@
 import java.util.Arrays;
 
 public class PieceKing extends Piece {
-    public PieceKing(Coord coord, String type, boolean isWhitePiece) {
-        super(coord, type, isWhitePiece);
+    public PieceKing(Coord coord, boolean isWhitePiece) {
+        super(coord, isWhitePiece);
+        this.typename = "king";
 
         // valid move directions for a king
         this.validMoveDirections = new int[8][2];

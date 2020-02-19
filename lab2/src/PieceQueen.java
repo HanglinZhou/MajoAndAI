@@ -1,7 +1,9 @@
 public class PieceQueen extends Piece {
 
-    public PieceQueen(Coord coord, String type, boolean isWhitePiece) {
-        super(coord, type, isWhitePiece);
+    public PieceQueen(Coord coord, boolean isWhitePiece) {
+        super(coord, isWhitePiece);
+        this.typename = "queen";
+
         // valid move directions for a queen
         this.validMoveDirections = new int[8][2];
         this.validMoveDirections[0] = new int[]{1, 1};

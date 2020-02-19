@@ -24,9 +24,8 @@ public abstract class Piece {
     boolean isWhitePiece;
 
 
-    public Piece(Coord coord, String type, boolean isWhitePiece) {
+    public Piece(Coord coord, boolean isWhitePiece) {
         this.coord = coord;
-        this.typename = type;
         this.isWhitePiece = isWhitePiece;
         this.pieceId = 0;
     }
