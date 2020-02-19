@@ -6,6 +6,71 @@ public class Board {
     HashMap<Coord, Piece> whiteTerritory;
     HashMap<Coord, Piece> blackTerritory;
     Board parentBoard;
+
+    public HashMap<Coord, Piece> getWhiteTerritory() {
+        return whiteTerritory;
+    }
+
+    public void setWhiteTerritory(HashMap<Coord, Piece> whiteTerritory) {
+        this.whiteTerritory = whiteTerritory;
+    }
+
+    public HashMap<Coord, Piece> getBlackTerritory() {
+        return blackTerritory;
+    }
+
+    public void setBlackTerritory(HashMap<Coord, Piece> blackTerritory) {
+        this.blackTerritory = blackTerritory;
+    }
+
+    public Board getParentBoard() {
+        return parentBoard;
+    }
+
+    public void setParentBoard(Board parentBoard) {
+        this.parentBoard = parentBoard;
+    }
+
+    public Piece getMovedPiece() {
+        return movedPiece;
+    }
+
+    public void setMovedPiece(Piece movedPiece) {
+        this.movedPiece = movedPiece;
+    }
+
+    public int getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
+    }
+
+    public int getBeta() {
+        return beta;
+    }
+
+    public void setBeta(int beta) {
+        this.beta = beta;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getNumAllValidMoves() {
+        return numAllValidMoves;
+    }
+
+    public void setNumAllValidMoves(int numAllValidMoves) {
+        this.numAllValidMoves = numAllValidMoves;
+    }
+
     Piece movedPiece;
     int alpha;
     int beta;
