@@ -1,5 +1,5 @@
 public class PieceQueen extends Piece {
-
+    static int id = 0; // keep track of how many king has been added;
     public PieceQueen(Coord coord, boolean isWhitePiece) {
         super(coord, isWhitePiece);
         this.typename = "queen";
@@ -20,6 +20,10 @@ public class PieceQueen extends Piece {
 
         // value for queen
         this.value = 9;
+
+        // assign and increment id
+        this.pieceId = id;
+        id++;
     }
 
     /***

@@ -103,6 +103,7 @@ public class Board {
         whiteTerritory = deepCloneAndSetMovedPiece(parentBoard.getWhiteTerritory(), move);
         blackTerritory = deepCloneAndSetMovedPiece(parentBoard.getBlackTerritory(), move);
 
+
         // remove the captured piece from enemy territory
         if (move.getPiece().isWhitePiece()) {
             if (blackTerritory.containsKey(move.getNewCoord()))
@@ -203,7 +204,7 @@ public class Board {
             // for each direction vector v of p, and each scalar multiple c of the vector,
             // check whether currCoord + v*c is valid move, and add all valid moves
             for (int[] dir : p.getValidMoveDirections()) {
-//                System.out.printf("move dir for [%s] %s is (%s, %s)", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
+                //System.out.printf("move dir for [%s] %s is (%s, %s)\n", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
                 for (int c = 1; c <= p.getValidMoveRange(); c++) {
                     // compute destination coord by adding (scalar * direction) to curr coord
                     int newRow = p.getCoord().getRow() + c * dir[0];
@@ -540,6 +541,7 @@ public class Board {
      */
     private HashMap<Coord,Piece> deepCloneAndSetMovedPiece(HashMap<Coord, Piece> parentTerritory, Move move) {
         HashMap<Coord, Piece> newTerritory = new HashMap<>();
+        //Coord coordToBeRemoved = null;
         for (Map.Entry<Coord, Piece> e : parentTerritory.entrySet()) {
             Piece parentPiece = e.getValue();
             String typename = parentPiece.getTypename();
@@ -550,11 +552,14 @@ public class Board {
             //?same piece
             if (parentPiece.equals(move.getPiece())) {
                 coord = move.getNewCoord();
-                newTerritory.remove(parentPiece.getCoord());
+                //coordToBeRemoved = parentPiece.getCoord();
+
+                //newTerritory.remove(parentPiece.getCoord());
             } else {
                 coord = parentPiece.getCoord();
             }
 
+            // typename: name of parent piece
             switch (typename) {
                 case "king":
                     //newPiece = new PieceKing(coord,parentPiece.isWhitePiece());
@@ -587,8 +592,9 @@ public class Board {
                 default:
                     break;
             }
+
             if (parentPiece.equals(move.getPiece()))
-                movedPiece = newPiece;
+                this.movedPiece = newPiece;
             newTerritory.put(coord, newPiece);
         }
 

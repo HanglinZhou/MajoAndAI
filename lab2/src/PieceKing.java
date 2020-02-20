@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 public class PieceKing extends Piece {
+    static int id = 0; // keep track of how many king has been added;
     public PieceKing(Coord coord, boolean isWhitePiece) {
         super(coord, isWhitePiece);
         this.typename = "king";
@@ -21,6 +22,10 @@ public class PieceKing extends Piece {
 
         // king does not have a value
         this.value = 0;
+
+        // assign and increment id
+        this.pieceId = id;
+        id++;
     }
 
     /***
