@@ -56,4 +56,14 @@ public class Coord {
         return Objects.hash(row, col);
     }
 
+    /***
+     * given a Coord c, compute the distance from self to c
+     * @param c
+     * @return
+     */
+    public double computeDistance(Coord c) {
+        return Math.sqrt((c.getCol() - this.col) *  (c.getCol() - this.col) +
+                         (c.getRow() - this.row) * (c.getRow() - this.row));
+    }
+
 }

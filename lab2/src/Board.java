@@ -486,6 +486,20 @@ public class Board {
         return new Board(currBoard, move);
     }
 
+
+    public double getTravelDistOfMovedPiece() {
+        // get previous coord from parent board
+        Coord prevCord = null;
+        HashMap<Coord, Piece> myPrevTerritory = this.parentBoard.getMyTerritory(this.movedPiece.isWhitePiece());
+        for (Coord c : myPrevTerritory.keySet()) {
+            if (myPrevTerritory.get(c).equals(this.movedPiece)) {
+                prevCord = c;
+            }
+        }
+
+        return movedPiece.getCoord().computeDistance(prevCord);
+    }
+
     /***
      * Determine if attacker is attacking attackee
      * @return true if attacker is attacking attackee
