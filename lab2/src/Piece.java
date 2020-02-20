@@ -111,4 +111,10 @@ public abstract class Piece {
                (this.pieceId == p.getPieceId() &&
                (this.isWhitePiece == p.isWhitePiece()));
     }
+
+    /***
+     *
+     * @return a deep copy of current Piece within new Coord
+     */
+    public abstract Piece makePieceCopy(Coord coord);
 }

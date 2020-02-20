@@ -23,5 +23,14 @@ public class PieceKing extends Piece {
         this.value = 0;
     }
 
+    /***
+     *
+     * @return a deep copy of current Piece within new Coord
+     */
+    public Piece makePieceCopy(Coord coord) {
+        Piece p = new PieceKing(coord, this.isWhitePiece);
+        p.setPieceId(this.pieceId);
+        return p;
+    }
 
 }

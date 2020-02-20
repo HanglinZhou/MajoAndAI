@@ -27,5 +27,14 @@ public class PiecePawn extends Piece {
         id++;
     }
 
+    /***
+     *
+     * @return a deep copy of current piecePawn within new Coord
+     */
+    public Piece makePieceCopy(Coord newCoord) {
+        Piece p = new PiecePawn(newCoord, this.isWhitePiece);
+        p.setPieceId(this.pieceId);
+        return p;
+    }
 
 }

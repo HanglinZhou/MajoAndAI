@@ -28,5 +28,14 @@ public class PieceKnight extends Piece {
         id++;
     }
 
+    /***
+     *
+     * @return a deep copy of current Piece within new Coord
+     */
+    public Piece makePieceCopy(Coord coord) {
+        Piece p = new PieceKnight(coord, this.isWhitePiece);
+        p.setPieceId(this.pieceId);
+        return p;
+    }
 
 }
