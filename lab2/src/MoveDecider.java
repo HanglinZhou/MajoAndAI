@@ -16,8 +16,11 @@ public class MoveDecider {
         AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
         AI aiValue = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyValue); //construct AI object with raw board data
 
-        Move moveDist = aiDist.runMinimax();
-        Move moveValue = aiValue.runMinimax();
+        Board bestNextBoardFoundDist = aiDist.runMinimax();
+        Board bestNextBoardFoundValue = aiValue.runMinimax();
+
+        Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
+        Move moveValue = new Move(bestNextBoardFoundValue.getMovedPiece(), bestNextBoardFoundValue.getMovedPiece().getCoord());
 
         char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
         char[][] newBoardDataValue = aiDist.getNewBoardAfterMove(moveValue);

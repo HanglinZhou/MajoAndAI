@@ -7,10 +7,9 @@ public class Board {
     HashMap<Coord, Piece> blackTerritory;
     Board parentBoard;
     Piece movedPiece;
-    int alpha;
-    int beta;
     int score; //value/score
     int numAllValidMoves;
+    int explorationDepth; //this board occurs at which level of exploration
     /*
     Keep track of the coord of white king. We update this value if we decide to move King.
      */
@@ -30,11 +29,11 @@ public class Board {
     public Board(char[][] boardData) {
         whiteTerritory = new HashMap<>();
         blackTerritory = new HashMap<>();
-        alpha = Integer.MIN_VALUE;
-        beta = Integer.MAX_VALUE;
         parentBoard = null;
         movedPiece = null;
-        score = Integer.MIN_VALUE;
+        explorationDepth = 0;
+        //ask M: maybe we don't want to set the score here, as in the algo, it is set in minimax
+        // score = Integer.MIN_VALUE;
         //todo: not tested
 
         for (int r = boardData.length - 1; r > -1; r--) {
@@ -93,8 +92,6 @@ public class Board {
         //todo
 
         this.parentBoard = parentBoard;
-        alpha = 0;
-        beta = 0;
         //Q: make sure we can import gson for deep clone(ask Park)
         /* TODO
         Gson gson = new Gson();
@@ -114,11 +111,6 @@ public class Board {
             if (whiteTerritory.containsKey(move.getNewCoord()))
                 whiteTerritory.remove(move.getNewCoord());
         }
-
-        //movedPiece
-        Piece pieceInParentTerritory = move.getPiece();
-        Coord newCoord = move.getNewCoord();
-
 
     }
 
@@ -156,22 +148,6 @@ public class Board {
         this.movedPiece = movedPiece;
     }
 
-    public int getAlpha() {
-        return alpha;
-    }
-
-    public void setAlpha(int alpha) {
-        this.alpha = alpha;
-    }
-
-    public int getBeta() {
-        return beta;
-    }
-
-    public void setBeta(int beta) {
-        this.beta = beta;
-    }
-
     public int getScore() {
         return score;
     }
@@ -191,6 +167,14 @@ public class Board {
 
     public void setNumAllValidMoves(int numAllValidMoves) {
         this.numAllValidMoves = numAllValidMoves;
+    }
+
+    public int getExplorationDepth() {
+        return explorationDepth;
+    }
+
+    public void setExplorationDepth(int explorationDepth) {
+        this.explorationDepth = explorationDepth;
     }
 
     /***
@@ -369,7 +353,7 @@ public class Board {
         }
 
         // check after making current move, whether there exists an enemy piece that can immediately attack king
-        Board newBoard = this.makeMove(this, move);
+        Board newBoard = this.makeMove(move);
 
         HashMap<Coord, Piece> enemyTerritory;
         if (isWhitePlaying) {
@@ -478,12 +462,11 @@ public class Board {
 
     /***
      * Make the move to the current board
-     * @param currBoard
      * @param move
      * @return the new board after making the move
      */
-    public Board makeMove(Board currBoard, Move move) {
-        return new Board(currBoard, move);
+    public Board makeMove(Move move) {
+        return new Board(this, move);
     }
 
 

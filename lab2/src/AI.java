@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 public class AI {
@@ -7,7 +9,6 @@ public class AI {
     ExplorePolicy policy;
     int numBoardsVisited = 0;
     char[][] initialBoardData;
-
 
     /***
      * Initialize the initial board and all other data field.
@@ -25,13 +26,18 @@ public class AI {
 
     /***
      * Run H-Minimax search and return the best move.
+     * Note: here we assume the specified h > 0, so we do not do the cutoff test here.
      *
-     * @return
+     * Logic here: start by calling H-max, which recursively calls H-min and itself.
+     * @return bestNextBoardFound
      */
-    public Move runMinimax() {
-        //todo
+    public Board runMinimax() {
+        //todo: change the signature
         Move bestMove = null;
-        return bestMove;
+        //start with white chess and we are white chess --> use maximizer
+        Board bestNextBoardFound = H_max(initialBoard.getExplorationDepth(), initialBoard, true,
+                Integer.MIN_VALUE, Integer.MAX_VALUE);
+        return bestNextBoardFound;
     }
 
     /***
@@ -72,28 +78,122 @@ public class AI {
 
     /***
      * min_a H-MINIMAX (Result(s,a), d+1) if Player(s)=MIN
+     *(base case) terminal state: we set the depth of current board to be currDepth
+     *  stalemate: one king left in territory each side; --> set borad score = 0
+     *  numAllValidMoves = 0: we won (our enemy lose --> set borad score = Integer.Max_VALUE
+     * (base case) cutoff test: we set the depth of current board to be currDepth
+     * (recursive steps) ...
      * @param currDepth
      * @param state
      * @param isWhitePiece
+     * @param alpha
+     * @param beta
      * @return
      */
-    private int H_min(int currDepth, Board state, boolean isWhitePiece) {
-       //todo
-        int minValue = 0;
-        return minValue;
+    private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
+        int numAllValidMoves = allValidMoves.size();
+        //base case 1: a terminal state is reached 1) stalemate (note: here we only consider one specific case: king vs king
+        // 2) checkmate
+        //TODO: redundancy
+        if (stalemate(state)) {
+            state.setExplorationDepth(currDepth);
+            state.setScore(0);
+            return state;
+
+        } else if (checkmate(numAllValidMoves)) {
+            state.setExplorationDepth(currDepth);
+            state.setScore(Integer.MAX_VALUE);
+            return state;
+        }
+
+        if (passCutoffTest(currDepth)) {
+            //base case: the only place the
+            state.setScore(evaluate(state));
+            state.setExplorationDepth(currDepth);
+            return state;
+        }
+
+        Board bestNextBoardFound = null;
+        //this is the sorted list of states (based on our exploration policy) after all valid moves
+        List<Board> statesAfterMove = getAllNewBoardAfterMove(state, allValidMoves);
+        int stateScore = Integer.MAX_VALUE;
+        //Question: should we set the initial score here?
+        for (Board childState : statesAfterMove) {
+            //better state found, update stateScore and bestNextBoardFound
+            //TODO: check here and naming is awful
+            Board bestNextNextBoardFound = H_max(currDepth+1, childState, !isWhitePiece, alpha, beta);
+            if (stateScore > bestNextNextBoardFound.getScore()) {
+                stateScore = bestNextNextBoardFound.getScore();
+                bestNextBoardFound = childState;
+            }
+            if (stateScore <= alpha)
+                break; //stop exploring other children & return bestNextBoardFound
+            beta = Math.min(stateScore, beta);
+
+        }
+        return bestNextBoardFound;
+
     }
+
 
     /***
      * max_a H-MINIMAX (Result(s,a), d+1) if Player(s)=MAX
+     * (base case) terminal state: we set the depth of current board to be currDepth
+     *  stalemate: one king left in territory each side; --> set borad score = 0
+     *  numAllValidMoves = 0: we lost --> set borad score = Integer.MIN_VALUE
+     * (base case) cutoff test: we set the depth of current board to be currDepth
+     * (recursive steps) ...
+     *
      * @param currDepth
      * @param state
      * @param isWhitePiece
+     * @param alpha
+     * @param beta
      * @return
      */
-    private int H_max(int currDepth, Board state, boolean isWhitePiece) {
-        //todo
-        int maxValue = 0;
-        return maxValue;
+    private Board H_max(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
+        int numAllValidMoves = allValidMoves.size();
+        //base case 1: a terminal state is reached 1) stalemate (note: here we only consider one specific case: king vs king
+        // 2) checkmate
+        if (stalemate(state)) {
+            state.setExplorationDepth(currDepth);
+            state.setScore(0);
+            return state;
+
+        } else if (checkmate(numAllValidMoves)) { //in this case, we are checkmated!
+            state.setExplorationDepth(currDepth);
+            state.setScore(Integer.MIN_VALUE);
+            return state;
+        }
+
+        if (passCutoffTest(currDepth)) {
+            //base case: the only place the
+            state.setScore(evaluate(state));
+            state.setExplorationDepth(currDepth);
+            return state;
+        }
+
+        Board bestNextBoardFound = null;
+        //this is the sorted list of states (based on our exploration policy) after all valid moves
+        List<Board> statesAfterMove = getAllNewBoardAfterMove(state, allValidMoves);
+        int stateScore = Integer.MIN_VALUE;
+        //Question: should we set the initial score here?
+        for (Board childState : statesAfterMove) {
+            //better state found, update stateScore and bestNextBoardFound
+            //TODO: check here and naming is awful
+            Board bestNextNextBoardFound = H_min(currDepth+1, childState, !isWhitePiece, alpha, beta);
+            if (stateScore < bestNextNextBoardFound.getScore()) {
+                stateScore = bestNextNextBoardFound.getScore();
+                bestNextBoardFound = childState;
+            }
+            if (stateScore >= beta)
+                break; //stop exploring other children & return bestNextBoardFound
+            alpha = Math.max(stateScore, alpha);
+
+        }
+        return bestNextBoardFound;
     }
 
     /***
@@ -116,6 +216,54 @@ public class AI {
     }
 
 
+    /***
+     * Pass cutoff test only if we reach the specific state with depth h.
+     *
+     * @param currDepth
+     * @return pass the test of not
+     */
+    private boolean passCutoffTest(int currDepth) {
+        return currDepth == hMinimaxDepth;
+    }
+
+    /***
+     * Reached terminal state: stalemate!
+     *
+     * @param state
+     * @return
+     */
+    private boolean stalemate(Board state) {
+        return state.getWhiteTerritory().size() == 1 && state.getBlackTerritory().size() == 1;
+    }
+
+    /***
+     * Reached terminal state: checkmate!
+     *
+     * @param numAllValidMoves
+     * @return
+     */
+    private boolean checkmate(int numAllValidMoves) {
+        return numAllValidMoves == 0;
+    }
+
+    /***
+     * Given a state/board and all computed valid moves, we construct all new boards with the given move --> unsorted states
+     * we sort the states based on given explorationPolicy
+     * At the end, return a list of states in the order of our exploration policy (we explore whatever state at the front first).
+     *
+     * @param state
+     * @param allValidMoves
+     * @return sortedStates
+     */
+    private List<Board> getAllNewBoardAfterMove(Board state, List<Move> allValidMoves) {
+        List<Board> statesAfterMove = new ArrayList<>();
+        for (Move move : allValidMoves) {
+            Board newState = state.makeMove(move);
+            statesAfterMove.add(newState);
+        }
+        policy.sortByExplorationOrder(statesAfterMove);
+        return statesAfterMove;
+    }
 
 }
 
