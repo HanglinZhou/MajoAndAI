@@ -216,6 +216,15 @@ public class AI {
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_min(currDepth+1, childState, !isWhitePiece, alpha, beta);
 
+
+//            //compare by depth also
+//            if (bestNextBoardFound!= null) {
+//                if (bestNextBoardFound.getExplorationDepth() > bestNextNextBoardFound.getExplorationDepth()) {
+//                    if (bestNextNextBoardFound.getScore() < 0)
+//                        continue; //lose
+//                    stateScore = bestNextNextBoardFound.getScore();
+//                }
+//            }
             if (stateScore <= bestNextNextBoardFound.getScore()) {
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
