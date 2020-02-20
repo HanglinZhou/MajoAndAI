@@ -25,7 +25,7 @@ public class MoveDecider {
         Board bestNextBoardFoundDist = aiDist.runMinimax();
         Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
         char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
-        int numBoardsVisitedDist = aiValue.getNumBoardsVisited();
+        int numBoardsVisitedDist = aiDist.getNumBoardsVisited();
 
         printOutput(moveDist, newBoardDataDist, numBoardsVisitedDist);
         printOutput(moveValue, newBoardDataValue, numBoardsVisitedValue);
@@ -101,6 +101,7 @@ public class MoveDecider {
         //todo: print newBoardData
         System.out.println(changeBoardDataToString(newBoardData));
         System.out.println("number boards visited: " + numBoardsVisited);
+        System.out.println();
 
     }
 
