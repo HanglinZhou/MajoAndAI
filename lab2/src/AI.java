@@ -108,6 +108,7 @@ public class AI {
      * @return
      */
     private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        System.out.println("H-min start");
         numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
@@ -117,11 +118,14 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
+            System.out.println("min - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) {
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MAX_VALUE);
+            System.out.println("min - returned in checkmate, depth - " + currDepth);
+            //System.out.println(state.getMovedPiece().typename);
             return state;
         }
 
@@ -129,6 +133,7 @@ public class AI {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth);
+            System.out.println("min - returned in cuttoff");
             return state;
         }
 
@@ -138,10 +143,12 @@ public class AI {
         int stateScore = Integer.MAX_VALUE;
         //Question: should we set the initial score here?
         for (Board childState : statesAfterMove) {
+            //System.out.println("min - just entered for look in : statesAfterMove");
             //better state found, update stateScore and bestNextBoardFound
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_max(currDepth+1, childState, !isWhitePiece, alpha, beta);
-            if (stateScore > bestNextNextBoardFound.getScore()) {
+            if (stateScore >= bestNextNextBoardFound.getScore()) {
+                //System.out.println("min - setting stateScore");
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
             }
@@ -171,6 +178,7 @@ public class AI {
      * @return
      */
     private Board H_max(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        System.out.println("H-max start");
         numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
@@ -179,11 +187,13 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
+            System.out.println("max - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) { //in this case, we are checkmated!
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MIN_VALUE);
+            System.out.println("max - returned in checkmate, depth - " + currDepth);
             return state;
         }
 
@@ -191,6 +201,7 @@ public class AI {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth);
+            System.out.println("max - returned in cuttoff");
             return state;
         }
 
@@ -203,7 +214,10 @@ public class AI {
             //better state found, update stateScore and bestNextBoardFound
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_min(currDepth+1, childState, !isWhitePiece, alpha, beta);
-            if (stateScore < bestNextNextBoardFound.getScore()) {
+            if (bestNextNextBoardFound == null) {
+                //System.out.println("returned from min is null");
+            }
+            if (stateScore <= bestNextNextBoardFound.getScore()) {
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
             }

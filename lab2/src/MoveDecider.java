@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MoveDecider {
-    final static int HMINIMAX_DEPTH = 4;
+    final static int HMINIMAX_DEPTH = 3;
     final static int BOARD_SIZE = 8;
 
     public static void main(String[] args) throws IOException {

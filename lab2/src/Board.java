@@ -203,6 +203,7 @@ public class Board {
             // for each direction vector v of p, and each scalar multiple c of the vector,
             // check whether currCoord + v*c is valid move, and add all valid moves
             for (int[] dir : p.getValidMoveDirections()) {
+                System.out.printf("move dir for [%s] %s is (%s, %s)", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
                 for (int c = 1; c <= p.getValidMoveRange(); c++) {
                     // compute destination coord by adding (scalar * direction) to curr coord
                     int newRow = p.getCoord().getRow() + c * dir[0];
@@ -216,8 +217,14 @@ public class Board {
                     Move newMove = new Move(p, destCoord);
                     //System.out.printf("new move created, %s %s to %s\n", p.isWhitePiece(), p.getTypename(), destCoord.toString());
                     if (isMoveValid(newMove)) {
+                        // todo: delete these
+                        if (newMove.getNewCoord().equals(new Coord(7, 4))) {
+                            System.out.printf("[%s] %s moves from %s to %s\n", p.isWhitePiece(), newMove.getPiece().getTypename(), p.getCoord().toString(), newMove.getNewCoord().toString());
+                        }
+
                         // if move valid, add move
                         validMoves.add(newMove);
+
                     } else {
                         // if a move is not valid, stop in moving in this direction
                         break;
@@ -544,6 +551,7 @@ public class Board {
             //?same piece
             if (parentPiece.equals(move.getPiece())) {
                 coord = move.getNewCoord();
+                newTerritory.remove(parentPiece.getCoord());
             } else {
                 coord = parentPiece.getCoord();
             }

@@ -16,6 +16,14 @@ public class PiecePawn extends Piece {
         //regular move
         this.validMoveDirections[2] = new int[]{1, 0};
 
+        if (!isWhitePiece) {
+            for (int[] dir : this.validMoveDirections) {
+                for (int i = 0; i < dir.length; i++) {
+                    dir[i] = dir[i] * (-1);
+                }
+            }
+        }
+
         // How many scalar multiple of the direction can a pawn move
         this.validMoveRange = 1;
 
