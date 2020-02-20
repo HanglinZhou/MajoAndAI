@@ -28,7 +28,10 @@ public class MoveDecider {
         int numBoardsVisitedDist = aiDist.getNumBoardsVisited();
 
         printOutput(moveDist, newBoardDataDist, numBoardsVisitedDist);
+        System.out.println("-------------distance exploration policy\n");
+
         printOutput(moveValue, newBoardDataValue, numBoardsVisitedValue);
+        System.out.println("-------------value exploration policy\n");
 
     }
 
@@ -101,7 +104,6 @@ public class MoveDecider {
         //todo: print newBoardData
         System.out.println(changeBoardDataToString(newBoardData));
         System.out.println("number boards visited: " + numBoardsVisited);
-        System.out.println();
 
     }
 
