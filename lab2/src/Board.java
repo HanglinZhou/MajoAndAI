@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 //import com.google.gson.*;
 
 public class Board {
@@ -183,8 +180,13 @@ public class Board {
         this.score = score;
     }
 
-    public int getNumAllValidMoves() {
-        return numAllValidMoves;
+    /***
+     *
+     * @param isWhitePlaying
+     * @return number of valid moves of current board given the side that is playing
+     */
+    public int getNumAllValidMoves(boolean isWhitePlaying) {
+        return this.computeAllValidMoves(isWhitePlaying).size();
     }
 
     public void setNumAllValidMoves(int numAllValidMoves) {
@@ -201,8 +203,6 @@ public class Board {
      * @return all valid moves for all pieces
      */
     public List<Move> computeAllValidMoves(boolean isWhitePlaying) {
-        //todo: test
-
         // store all the valid moves to be returned
         List<Move> validMoves = new ArrayList<>();
 
@@ -244,11 +244,94 @@ public class Board {
         return validMoves;
     }
 
-    public int computeAllPieceValue(boolean isWhitePiece) {
-        //todo
-        int sumPieceValue = 0;
-        return sumPieceValue;
+    /***
+     *  For all alive pieces of the side that is playing, the the sum of each value
+     * @return the alive piece values sum of the side playing
+     */
+    public int computeAllPieceValue(boolean isWhitePlaying) {
+        int alivePieceValueSum = 0;
+
+        HashMap<Coord, Piece> playerTerritory;
+        if (isWhitePlaying) {
+            playerTerritory = this.getWhiteTerritory();
+        } else {
+            playerTerritory = this.getBlackTerritory();
+        }
+
+        for (Piece p : playerTerritory.values()) {
+            alivePieceValueSum += p.getValue();
+        }
+
+        return alivePieceValueSum;
     }
+
+    /***
+     * given the side that is playing, return the number of pawns that are protected of that side
+     * @param isWhitePlaying
+     * @return num protected pawns
+     */
+    public int getNumProtectedPawns(boolean isWhitePlaying) {
+        int numProtectedPawns = 0;
+        // for each alive pawn, check whether it is protected, and increment the result if it is
+        HashMap<Coord, Piece> myTerritory = this.getMyTerritory(isWhitePlaying);
+
+        for (Piece p : myTerritory.values()) {
+            if (p.getTypename().equals("pawn") && this.isPawnProtected(p)) {
+                numProtectedPawns++;
+            }
+        }
+
+        return numProtectedPawns;
+    }
+
+    /***
+     *
+     * @param isWhitePlaying
+     * @return the territory of the side that is playing
+     */
+    private HashMap<Coord, Piece> getMyTerritory(boolean isWhitePlaying) {
+        if (isWhitePlaying) {
+            return this.whiteTerritory;
+        } else {
+            return this.blackTerritory;
+        }
+    }
+
+    /***
+     *
+     * @param pawn
+     * @return whether the pawn is protected by other pieces on the same side
+     */
+    private boolean isPawnProtected(Piece pawn) {
+        HashMap<Coord, Piece> myTerritory = this.getMyTerritory(pawn.isWhitePiece());
+        // for each piece of the same side, check whether the piece protects the pawn
+        for (Piece p : myTerritory.values()) {
+            if (!p.equals(pawn)) {
+                for (int[] direc : p.getValidMoveDirections()) {
+                    for (int c = 1; c <= p.getValidMoveRange(); c++) {
+                        Coord coordOnTheWay = new Coord(p.getCoord().getRow() + c*direc[0],
+                                                         p.getCoord().getCol() + c*direc[1]);
+                        Move move = new Move(p, coordOnTheWay);
+                        if (this.isKingEndangered(move))
+                            break; // if king is endangered by moving p, stop
+                        if (this.getBlockingPiece(move) != null) {
+                            // if something is blocking the way
+                            if (this.getBlockingPiece(move).equals(pawn)) {
+                                // if it is actually the pawn that is blocking the way, then the pawn is protected
+                                return true;
+                            }
+                            // if other things are blocking the way, then pawn is not protected from this direction
+                            break;
+                        } // if nothing is blocking the way, keep going
+                    }
+                }
+
+            }
+        }
+        // if no piece is protecting the pawn, return false
+        return false;
+    }
+
     /***
      * Detemine if the move is valid.
      * @return true if move is valid
@@ -260,6 +343,15 @@ public class Board {
         if (this.isBlockedByOwnPiece(move) || this.isKingEndangered(move))
             return false;
 
+        // if the piece to move is a pawn, make sure the condition for special move
+        // is there, otherwise return false
+        if (move.getPiece().getTypename().equals("pawn")) {
+            if (move.getNewCoord().getCol() != move.getPiece().getCoord().getCol()) {
+                // if is indeed currently special move
+                if (!this.isOccupiedByEnemyPiece(move))
+                    return false;
+            }
+        }
         return true;
     }
 

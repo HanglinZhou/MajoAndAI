@@ -18,15 +18,22 @@ public class Test {
         data[3][4] = 'K';
 
         Board dumbBoard = new Board(data);
-        System.out.println("# white pieces: " + dumbBoard.getWhiteTerritory().size());
+        //System.out.println("# white pieces: " + dumbBoard.getWhiteTerritory().size());
+        int score = dumbBoard.computeAllPieceValue(true);
+        System.out.println(score);
+        score = dumbBoard.getNumAllValidMoves(true);
+        System.out.println(score);
+        score = dumbBoard.getNumProtectedPawns(true);
+        System.out.println(score);
 
 
+
+        /*
         List<Move> result = dumbBoard.computeAllValidMoves(true);
         for (Move m : result) {
             System.out.println(m);
         }
 
-        /*
         char[][] dummy = new char[1][1];
         Board dumbBoard = new Board(dummy);
 

@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class AI {
     int hMinimaxDepth;
     boolean playWithWhitePieces;
@@ -95,18 +97,24 @@ public class AI {
     }
 
     /***
-     * The evaluation function based on some heuristics.
+     * The evaluation function f(n) = sum of all alive piece values +
+     *                                sum of number of all possible moves +
+     *                                number of protected pawns
      * @param state
      *
-     * @return The first cell has the depth of the found terminal state or the
-     * maximum depth (H). The second cell is the evaluated value of a given state/board.
+     * @return the evaluation value of the given state/board.
      */
-    private int[] evaluate(Board state) {
+    private int evaluate(Board state) {
         //todo
-        int evaluatedValue[] = null;
+        int evaluatedValue = state.computeAllPieceValue(playWithWhitePieces) +
+                             state.getNumAllValidMoves(playWithWhitePieces) +
+                             state.getNumProtectedPawns(playWithWhitePieces);
+
+
 
         return evaluatedValue;
     }
+
 
 
 }
