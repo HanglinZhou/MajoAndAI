@@ -30,7 +30,7 @@ public class AI {
         this.initialBoardData = new char[boardSize][boardSize];
         for (int r = 0; r < boardSize; r++) {
             for (int c = 0; c < boardSize; c++) {
-                this.initialBoardData[boardSize - 1 - r][c] = boardData[r][c];
+                this.initialBoardData[r][c] = boardData[r][c];
             }
         }
 
@@ -70,7 +70,7 @@ public class AI {
         Coord newCoord = move.getNewCoord();
 
         // change curr Coord to blank, since the piece is moved away
-        newBoard[currCoord.getRow()][currCoord.getCol()] = '_';
+        newBoard[(Math.abs(1+currCoord.getRow()-8))][currCoord.getCol()] = '_';
 
         // get marker of curr piece
         char marker;
@@ -87,7 +87,7 @@ public class AI {
         }
 
         // change destination coord to marker of moved piece
-        newBoard[newCoord.getRow()][newCoord.getCol()] = marker;
+        newBoard[(Math.abs(1+newCoord.getRow()-8))][newCoord.getCol()] = marker;
 
 
         return newBoard;
@@ -125,6 +125,7 @@ public class AI {
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MAX_VALUE);
             //System.out.println("min - returned in checkmate, depth - " + currDepth);
+            // System.out.println("movedpiece: " + state.movedPiece.getTypename() + " coord: " + state.movedPiece.getCoord());
             //System.out.println(state.getMovedPiece().typename);
             return state;
         }
@@ -214,9 +215,7 @@ public class AI {
             //better state found, update stateScore and bestNextBoardFound
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_min(currDepth+1, childState, !isWhitePiece, alpha, beta);
-            if (bestNextNextBoardFound == null) {
-                //System.out.println("returned from min is null");
-            }
+
             if (stateScore <= bestNextNextBoardFound.getScore()) {
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
