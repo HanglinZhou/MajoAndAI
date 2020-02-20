@@ -14,6 +14,7 @@ public class Board {
     int beta;
     int score; //value/score
     int numAllValidMoves;
+    int explorationDepth; //this board occurs at which level of exploration
     /*
     Keep track of the coord of white king. We update this value if we decide to move King.
      */
@@ -37,7 +38,9 @@ public class Board {
         beta = Integer.MAX_VALUE;
         parentBoard = null;
         movedPiece = null;
-        score = Integer.MIN_VALUE;
+        explorationDepth = 0;
+        //ask M: maybe we don't want to set the score here, as in the algo, it is set in minimax
+        // score = Integer.MIN_VALUE;
         //todo: not tested
 
         for (int r = boardData.length - 1; r > -1; r--) {

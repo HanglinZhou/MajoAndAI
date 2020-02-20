@@ -21,12 +21,15 @@ public class AI {
 
     /***
      * Run H-Minimax search and return the best move.
-     *
+     * Note: here we assume the specified h > 0, so we do not do the cutoff test here. If we return value, we need to backtrack?
+     * find the immediate children state with the same value?
      * @return
      */
     public Move runMinimax() {
         //todo
         Move bestMove = null;
+        //start with white chess and we are white chess --> use maximizer
+        H_max(0, initialBoard, true);
         return bestMove;
     }
 
@@ -51,6 +54,8 @@ public class AI {
      */
     private int H_min(int currDepth, Board state, boolean isWhitePiece) {
        //todo
+        if (passCutoffTest(currDepth))
+            return evaluate(state); //set the score of the board here?
         int minValue = 0;
         return minValue;
     }
@@ -82,6 +87,14 @@ public class AI {
         return evaluatedValue;
     }
 
-
+    /***
+     * Pass cutoff test only if we reach the specific state with depth h.
+     *
+     * @param currDepth
+     * @return pass the test of not
+     */
+    private boolean passCutoffTest(int currDepth) {
+        return currDepth == hMinimaxDepth;
+    }
 }
 
