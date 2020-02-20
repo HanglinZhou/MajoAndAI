@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AI {
@@ -124,8 +123,8 @@ public class AI {
         } else if (checkmate(numAllValidMoves)) {
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MAX_VALUE);
-            //System.out.println("min - returned in checkmate, depth - " + currDepth);
-            // System.out.println("movedpiece: " + state.movedPiece.getTypename() + " coord: " + state.movedPiece.getCoord());
+            System.out.println("min - returned in checkmate, depth: " + currDepth);
+             System.out.println("movedpiece: " + state.movedPiece.getTypename() + " coord: " + state.movedPiece.getCoord() + " score: " + state.getScore());
             //System.out.println(state.getMovedPiece().typename);
             return state;
         }
@@ -148,10 +147,17 @@ public class AI {
             //better state found, update stateScore and bestNextBoardFound
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_max(currDepth+1, childState, !isWhitePiece, alpha, beta);
+            if (bestNextBoardFound != null && bestNextBoardFound.getExplorationDepth() > bestNextNextBoardFound.getExplorationDepth()) {
+                if (bestNextNextBoardFound.getScore() > 0)
+                    continue; //lose (black win)
+                stateScore = bestNextNextBoardFound.getScore();
+            }
             if (stateScore >= bestNextNextBoardFound.getScore()) {
                 //System.out.println("min - setting stateScore");
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
+                bestNextBoardFound.setExplorationDepth(bestNextNextBoardFound.getExplorationDepth());
+                bestNextBoardFound.setScore(stateScore);
             }
             if (stateScore <= alpha)
                 break; //stop exploring other children & return bestNextBoardFound
@@ -225,9 +231,20 @@ public class AI {
 //                    stateScore = bestNextNextBoardFound.getScore();
 //                }
 //            }
+            if (bestNextNextBoardFound.getScore() == Integer.MAX_VALUE) {
+                System.out.println("at depth: " + currDepth + " returned from min state: " + bestNextNextBoardFound.getMovedPiece().toString());
+            }
+            if (bestNextBoardFound != null && bestNextBoardFound.getExplorationDepth() > bestNextNextBoardFound.getExplorationDepth()) {
+                if (bestNextNextBoardFound.getScore() < 0)
+                    continue; //lose
+                stateScore = bestNextNextBoardFound.getScore();
+            }
             if (stateScore <= bestNextNextBoardFound.getScore()) {
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
+                bestNextBoardFound.setExplorationDepth(bestNextNextBoardFound.getExplorationDepth());
+                bestNextBoardFound.setScore(stateScore);
+
             }
             if (stateScore >= beta)
                 break; //stop exploring other children & return bestNextBoardFound
