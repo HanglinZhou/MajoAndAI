@@ -18,12 +18,14 @@ public class MoveDecider {
         Board bestNextBoardFoundValue = aiValue.runMinimax();
         Move moveValue = new Move(bestNextBoardFoundValue.getMovedPiece(), bestNextBoardFoundValue.getMovedPiece().getCoord());
         char[][] newBoardDataValue = aiValue.getNewBoardAfterMove(moveValue);
+        int numBoardsVisitedValue = aiValue.getNumBoardsVisited();
 
         ExplorePolicy policyDist = new ExplorePolicyDistance();
         AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
         Board bestNextBoardFoundDist = aiDist.runMinimax();
         Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
         char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
+        int numBoardsVisitedDist = aiValue.getNumBoardsVisited();
 //        if (bestNextBoardFoundValue == null)
 //            System.out.println("best is null");
 //        if (bestNextBoardFoundValue.getMovedPiece() == null)
@@ -35,8 +37,8 @@ public class MoveDecider {
 //        else
 //            System.out.print("coord: " + bestNextBoardFoundValue.getMovedPiece().getCoord().toString());
 
-        printOutput(moveDist, newBoardDataDist);
-        printOutput(moveValue, newBoardDataValue);
+        printOutput(moveDist, newBoardDataDist, numBoardsVisitedDist);
+        printOutput(moveValue, newBoardDataValue, numBoardsVisitedValue);
 
     }
 
@@ -102,12 +104,13 @@ public class MoveDecider {
     }
 
 
-    private static void printOutput(Move move, char[][] newBoardData) {
+    private static void printOutput(Move move, char[][] newBoardData, int numBoardsVisited) {
         System.out.println("===== Printing result =====: ");
         System.out.println(move.toString());
         System.out.println("------------------>>>>");
         //todo: print newBoardData
         System.out.println(changeBoardDataToString(newBoardData));
+        System.out.println("number boards visited: " + numBoardsVisited);
 
     }
 

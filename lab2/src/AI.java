@@ -8,6 +8,11 @@ public class AI {
     boolean playWithWhitePieces;
     Board initialBoard;
     ExplorePolicy policy;
+
+    public int getNumBoardsVisited() {
+        return numBoardsVisited;
+    }
+
     int numBoardsVisited = 0;
     char[][] initialBoardData;
 
@@ -100,6 +105,7 @@ public class AI {
      * @return
      */
     private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
         //base case 1: a terminal state is reached 1) stalemate (note: here we only consider one specific case: king vs king
@@ -162,6 +168,7 @@ public class AI {
      * @return
      */
     private Board H_max(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
+        numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
         //base case 1: a terminal state is reached 1) stalemate (note: here we only consider one specific case: king vs king
