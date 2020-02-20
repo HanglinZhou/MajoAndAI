@@ -17,12 +17,18 @@ public class AI {
      * @param playWithWhitePieces
      * @param boardData
      */
-    public AI(int hMinimaxDepth, boolean playWithWhitePieces, char[][] boardData, ExplorePolicy policy) {
+    public AI(int hMinimaxDepth, boolean playWithWhitePieces, char[][] boardData, ExplorePolicy policy, int boardSize) {
         this.hMinimaxDepth = hMinimaxDepth;
         this.playWithWhitePieces = playWithWhitePieces;
         initialBoard = new Board(boardData);
         this.policy = policy;
-        this.initialBoardData = boardData;
+        this.initialBoardData = new char[boardSize][boardSize];
+        for (int r = 0; r < boardSize; r++) {
+            for (int c = 0; c < boardSize; c++) {
+                this.initialBoardData[r][c] = boardData[r][c];
+            }
+        }
+
     }
 
     /***
@@ -37,8 +43,6 @@ public class AI {
         //start with white chess and we are white chess --> use maximizer
         Board bestNextBoardFound = H_max(initialBoard.getExplorationDepth(), initialBoard, true,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
-        if (bestNextBoardFound == null)
-            System.out.println("best is null");
         return bestNextBoardFound;
     }
 
@@ -50,11 +54,10 @@ public class AI {
     public char[][] getNewBoardAfterMove(Move move) {
         //todo: test
         char[][] newBoard = this.initialBoardData;
+
         //iterate and find the original piece coord --> may need to look back to move, this is a bit hacky
         Coord currCoord = null;
-        System.out.print("territory.size: " + initialBoard.getWhiteTerritory().size());
         for (Map.Entry<Coord, Piece> e : initialBoard.getWhiteTerritory().entrySet()) {
-            System.out.print("coord: " + e.getKey().toString() + " piece: " + e.getValue().toString());
             if (e.getValue().equals(move.getPiece()))
                 currCoord = e.getKey();
         }
