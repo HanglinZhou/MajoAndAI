@@ -9,7 +9,6 @@ import java.util.PriorityQueue;
 public class ExplorePolicyDistance implements ExplorePolicy {
     @Override
     public void sortByExplorationOrder(List<Board> unsortedBoards) {
-        //todo
         PriorityQueue<Board> pq = new PriorityQueue<>(new BoardComparatorByTravelDist());
         for (Board b : unsortedBoards) {
             pq.offer(b);
