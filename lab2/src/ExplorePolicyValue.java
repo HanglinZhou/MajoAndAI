@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 
 /***
- * This exploration policy let AI explore the board with a moved piece that has a higher piece value first.
+ * This exploration policy let AI explore the board with a moved piece that has a higher value first.
  */
 public class ExplorePolicyValue implements ExplorePolicy {
     @Override
@@ -16,6 +16,6 @@ public class ExplorePolicyValue implements ExplorePolicy {
         while (!pq.isEmpty()) {
             unsortedBoards.add(index, pq.poll());
             index++;
-        };
+        }
     }
 }
