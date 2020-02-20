@@ -36,11 +36,11 @@ public class Board {
         // score = Integer.MIN_VALUE;
         //todo: not tested
 
-        for (int r = boardData.length - 1; r > -1; r--) {
+        for (int r = 0; r < boardData.length; r++) {
             for (int c = 0; c < boardData[r].length; c++) {
                 if (boardData[r][c] != BLANK) {
                     char pieceChar = boardData[r][c];
-                    Coord coord = new Coord(r,c);
+                    Coord coord = new Coord(boardData.length - 1 - r,c);
                     Piece piece = null;
                     boolean isWhitePiece = Character.isUpperCase(pieceChar);
                     pieceChar = Character.toLowerCase(pieceChar);
@@ -203,7 +203,7 @@ public class Board {
             // for each direction vector v of p, and each scalar multiple c of the vector,
             // check whether currCoord + v*c is valid move, and add all valid moves
             for (int[] dir : p.getValidMoveDirections()) {
-                System.out.printf("move dir for [%s] %s is (%s, %s)", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
+//                System.out.printf("move dir for [%s] %s is (%s, %s)", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
                 for (int c = 1; c <= p.getValidMoveRange(); c++) {
                     // compute destination coord by adding (scalar * direction) to curr coord
                     int newRow = p.getCoord().getRow() + c * dir[0];
@@ -213,14 +213,13 @@ public class Board {
                     // if new coord go out of the boarder of board, stop in current direction
                     if (destCoord.isOutOfRange())
                         break;
-
                     Move newMove = new Move(p, destCoord);
                     //System.out.printf("new move created, %s %s to %s\n", p.isWhitePiece(), p.getTypename(), destCoord.toString());
                     if (isMoveValid(newMove)) {
                         // todo: delete these
-                        if (newMove.getNewCoord().equals(new Coord(7, 4))) {
-                            System.out.printf("[%s] %s moves from %s to %s\n", p.isWhitePiece(), newMove.getPiece().getTypename(), p.getCoord().toString(), newMove.getNewCoord().toString());
-                        }
+//                        if (newMove.getNewCoord().equals(new Coord(7, 4))) {
+//                            System.out.printf("[%s] %s moves from %s to %s\n", p.isWhitePiece(), newMove.getPiece().getTypename(), p.getCoord().toString(), newMove.getNewCoord().toString());
+//                        }
 
                         // if move valid, add move
                         validMoves.add(newMove);
