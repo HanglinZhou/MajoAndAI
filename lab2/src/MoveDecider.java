@@ -14,28 +14,18 @@ public class MoveDecider {
 
 
         ExplorePolicy policyValue = new ExplorePolicyValue();
-        AI aiValue = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyValue); //construct AI object with raw board data
+        AI aiValue = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyValue, BOARD_SIZE); //construct AI object with raw board data
         Board bestNextBoardFoundValue = aiValue.runMinimax();
         Move moveValue = new Move(bestNextBoardFoundValue.getMovedPiece(), bestNextBoardFoundValue.getMovedPiece().getCoord());
         char[][] newBoardDataValue = aiValue.getNewBoardAfterMove(moveValue);
         int numBoardsVisitedValue = aiValue.getNumBoardsVisited();
 
         ExplorePolicy policyDist = new ExplorePolicyDistance();
-        AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
+        AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist, BOARD_SIZE); //construct AI object with raw board data
         Board bestNextBoardFoundDist = aiDist.runMinimax();
         Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
         char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
         int numBoardsVisitedDist = aiValue.getNumBoardsVisited();
-//        if (bestNextBoardFoundValue == null)
-//            System.out.println("best is null");
-//        if (bestNextBoardFoundValue.getMovedPiece() == null)
-//            System.out.println("best piece is null");
-//        else
-//            System.out.print("piece: " + bestNextBoardFoundValue.getMovedPiece().toString());
-//        if (bestNextBoardFoundValue.getMovedPiece().getCoord() == null)
-//            System.out.println("best coord is null");
-//        else
-//            System.out.print("coord: " + bestNextBoardFoundValue.getMovedPiece().getCoord().toString());
 
         printOutput(moveDist, newBoardDataDist, numBoardsVisitedDist);
         printOutput(moveValue, newBoardDataValue, numBoardsVisitedValue);
