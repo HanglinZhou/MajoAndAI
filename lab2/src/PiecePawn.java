@@ -33,15 +33,25 @@ public class PiecePawn extends Piece {
         // assign and increment id
         this.pieceId = id;
         id++;
+
     }
 
+    private PiecePawn(Coord newCoord, PiecePawn parent) {
+        super(newCoord, parent.isWhitePiece);
+        this.typename = parent.getTypename();
+        this.validMoveDirections = parent.getValidMoveDirections().clone();
+        this.validMoveRange = parent.getValidMoveRange();
+        this.value = parent.getValue();
+        this.pieceId = parent.getPieceId();
+
+    }
     /***
      *
      * @return a deep copy of current piecePawn within new Coord
      */
     public Piece makePieceCopy(Coord newCoord) {
-        Piece p = new PiecePawn(newCoord, this.isWhitePiece);
-        p.setPieceId(this.pieceId);
+        Piece p = new PiecePawn(newCoord, this);
+//        p.setPieceId(this.pieceId);
         return p;
     }
 

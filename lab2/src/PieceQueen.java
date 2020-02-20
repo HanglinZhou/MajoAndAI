@@ -26,13 +26,22 @@ public class PieceQueen extends Piece {
         id++;
     }
 
+    private PieceQueen(Coord newCoord, PieceQueen parent) {
+        super(newCoord, parent.isWhitePiece);
+        this.typename = parent.getTypename();
+        this.validMoveDirections = parent.getValidMoveDirections().clone();
+        this.validMoveRange = parent.getValidMoveRange();
+        this.value = parent.getValue();
+        this.pieceId = parent.getPieceId();
+
+    }
     /***
      *
      * @return a deep copy of current Piece within new Coord
      */
     public Piece makePieceCopy(Coord coord) {
-        Piece p = new PieceQueen(coord, this.isWhitePiece);
-        p.setPieceId(this.pieceId);
+        Piece p = new PieceQueen(coord, this);
+//        p.setPieceId(this.pieceId);
         return p;
     }
 

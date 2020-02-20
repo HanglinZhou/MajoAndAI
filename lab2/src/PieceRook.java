@@ -21,16 +21,26 @@ public class PieceRook extends Piece {
 
         // assign and increment id
         this.pieceId = id;
+
         id++;
     }
 
+    private PieceRook(Coord newCoord, PieceRook parent) {
+        super(newCoord, parent.isWhitePiece);
+        this.typename = parent.getTypename();
+        this.validMoveDirections = parent.getValidMoveDirections().clone();
+        this.validMoveRange = parent.getValidMoveRange();
+        this.value = parent.getValue();
+        this.pieceId = parent.getPieceId();
+
+    }
     /***
      *
      * @return a deep copy of current Piece within new Coord
      */
     public Piece makePieceCopy(Coord coord) {
-        Piece p = new PieceRook(coord, this.isWhitePiece);
-        p.setPieceId(this.pieceId);
+        Piece p = new PieceRook(coord, this);
+//        p.setPieceId(this.pieceId);
         return p;
     }
 

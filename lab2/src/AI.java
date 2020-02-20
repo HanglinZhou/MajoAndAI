@@ -231,6 +231,8 @@ public class AI {
 //                    stateScore = bestNextNextBoardFound.getScore();
 //                }
 //            }
+            if (bestNextNextBoardFound.getMovedPiece().getTypename().equals("knight") && bestNextNextBoardFound.getMovedPiece().getCoord().equals(new Coord(2,1)))
+                System.out.println("knight we want to move" + bestNextNextBoardFound.getMovedPiece().getPieceId()+ ", score: " +bestNextNextBoardFound.getScore());
             if (bestNextNextBoardFound.getScore() == Integer.MAX_VALUE) {
                 System.out.println("at depth: " + currDepth + " returned from min state: " + bestNextNextBoardFound.getMovedPiece().toString());
             }
@@ -243,7 +245,10 @@ public class AI {
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
                 bestNextBoardFound.setExplorationDepth(bestNextNextBoardFound.getExplorationDepth());
-                bestNextBoardFound.setScore(stateScore);
+                bestNextBoardFound.setScore(bestNextNextBoardFound.getScore());
+                if (bestNextBoardFound.getScore() == Integer.MAX_VALUE) {
+                    System.out.println("set the value to be max");
+                }
 
             }
             if (stateScore >= beta)
