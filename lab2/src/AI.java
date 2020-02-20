@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AI {
     int hMinimaxDepth;
@@ -33,10 +34,11 @@ public class AI {
      */
     public Board runMinimax() {
         //todo: change the signature
-        Move bestMove = null;
         //start with white chess and we are white chess --> use maximizer
         Board bestNextBoardFound = H_max(initialBoard.getExplorationDepth(), initialBoard, true,
                 Integer.MIN_VALUE, Integer.MAX_VALUE);
+        if (bestNextBoardFound == null)
+            System.out.println("best is null");
         return bestNextBoardFound;
     }
 
@@ -48,8 +50,15 @@ public class AI {
     public char[][] getNewBoardAfterMove(Move move) {
         //todo: test
         char[][] newBoard = this.initialBoardData;
+        //iterate and find the original piece coord --> may need to look back to move, this is a bit hacky
+        Coord currCoord = null;
+        System.out.print("territory.size: " + initialBoard.getWhiteTerritory().size());
+        for (Map.Entry<Coord, Piece> e : initialBoard.getWhiteTerritory().entrySet()) {
+            System.out.print("coord: " + e.getKey().toString() + " piece: " + e.getValue().toString());
+            if (e.getValue().equals(move.getPiece()))
+                currCoord = e.getKey();
+        }
         Piece p = move.getPiece();
-        Coord currCoord = p.getCoord();
         Coord newCoord = move.getNewCoord();
 
         // change curr Coord to blank, since the piece is moved away

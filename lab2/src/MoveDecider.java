@@ -11,21 +11,29 @@ public class MoveDecider {
         char[][] boardData = readInput();
         boolean playWithWhitePiece = true;
         //TODO: depth is hardcoded here, it can be easily changed to be a input value, default to play with white piece
-        ExplorePolicy policyDist = new ExplorePolicyDistance();
+//        ExplorePolicy policyDist = new ExplorePolicyDistance();
+//        AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
+//        Board bestNextBoardFoundDist = aiDist.runMinimax();
+//        Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
+//        char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
+
         ExplorePolicy policyValue = new ExplorePolicyValue();
-        AI aiDist = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyDist); //construct AI object with raw board data
         AI aiValue = new AI(HMINIMAX_DEPTH, playWithWhitePiece, boardData, policyValue); //construct AI object with raw board data
-
-        Board bestNextBoardFoundDist = aiDist.runMinimax();
         Board bestNextBoardFoundValue = aiValue.runMinimax();
-
-        Move moveDist = new Move(bestNextBoardFoundDist.getMovedPiece(), bestNextBoardFoundDist.getMovedPiece().getCoord());
+        if (bestNextBoardFoundValue == null)
+            System.out.println("best is null");
         Move moveValue = new Move(bestNextBoardFoundValue.getMovedPiece(), bestNextBoardFoundValue.getMovedPiece().getCoord());
+        if (bestNextBoardFoundValue.getMovedPiece() == null)
+            System.out.println("best piece is null");
+        else
+            System.out.print("piece: " + bestNextBoardFoundValue.getMovedPiece().toString());
+        if (bestNextBoardFoundValue.getMovedPiece().getCoord() == null)
+            System.out.println("best coord is null");
+        else
+            System.out.print("coord: " + bestNextBoardFoundValue.getMovedPiece().getCoord().toString());
+        char[][] newBoardDataValue = aiValue.getNewBoardAfterMove(moveValue);
 
-        char[][] newBoardDataDist = aiDist.getNewBoardAfterMove(moveDist);
-        char[][] newBoardDataValue = aiDist.getNewBoardAfterMove(moveValue);
-
-        printOutput(moveDist, newBoardDataDist);
+//        printOutput(moveDist, newBoardDataDist);
         printOutput(moveValue, newBoardDataValue);
 
     }
