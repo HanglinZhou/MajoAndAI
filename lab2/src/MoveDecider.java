@@ -113,8 +113,8 @@ public class MoveDecider {
 
         for (char[] row : newBoardData) {
             for (char c : row)
-                ans += c + " ";
-            ans += "\n";
+                ans = c + " " + ans;
+            ans = "\n" + ans;
         }
 
         return ans;

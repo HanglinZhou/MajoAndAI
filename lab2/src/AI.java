@@ -30,7 +30,7 @@ public class AI {
         this.initialBoardData = new char[boardSize][boardSize];
         for (int r = 0; r < boardSize; r++) {
             for (int c = 0; c < boardSize; c++) {
-                this.initialBoardData[r][c] = boardData[r][c];
+                this.initialBoardData[boardSize - 1 - r][c] = boardData[r][c];
             }
         }
 
@@ -108,7 +108,7 @@ public class AI {
      * @return
      */
     private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
-        System.out.println("H-min start");
+        //System.out.println("H-min start");
         numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
@@ -118,13 +118,13 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
-            System.out.println("min - returned in stalemate");
+            //System.out.println("min - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) {
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MAX_VALUE);
-            System.out.println("min - returned in checkmate, depth - " + currDepth);
+            //System.out.println("min - returned in checkmate, depth - " + currDepth);
             //System.out.println(state.getMovedPiece().typename);
             return state;
         }
@@ -133,7 +133,7 @@ public class AI {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth);
-            System.out.println("min - returned in cuttoff");
+            //System.out.println("min - returned in cuttoff");
             return state;
         }
 
@@ -178,7 +178,7 @@ public class AI {
      * @return
      */
     private Board H_max(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
-        System.out.println("H-max start");
+        //System.out.println("H-max start");
         numBoardsVisited++;
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
@@ -187,13 +187,13 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
-            System.out.println("max - returned in stalemate");
+            //System.out.println("max - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) { //in this case, we are checkmated!
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MIN_VALUE);
-            System.out.println("max - returned in checkmate, depth - " + currDepth);
+            //System.out.println("max - returned in checkmate, depth - " + currDepth);
             return state;
         }
 
@@ -201,7 +201,7 @@ public class AI {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth);
-            System.out.println("max - returned in cuttoff");
+            //System.out.println("max - returned in cuttoff");
             return state;
         }
 
