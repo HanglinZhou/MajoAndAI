@@ -22,5 +22,14 @@ public class PieceQueen extends Piece {
         this.value = 9;
     }
 
+    /***
+     *
+     * @return a deep copy of current Piece within new Coord
+     */
+    public Piece makePieceCopy(Coord coord) {
+        Piece p = new PieceQueen(coord, this.isWhitePiece);
+        p.setPieceId(this.pieceId);
+        return p;
+    }
 
 }

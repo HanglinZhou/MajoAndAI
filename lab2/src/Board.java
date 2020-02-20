@@ -474,8 +474,12 @@ public class Board {
         // get previous coord from parent board
         Coord prevCord = null;
         HashMap<Coord, Piece> myPrevTerritory = this.parentBoard.getMyTerritory(this.movedPiece.isWhitePiece());
+        //System.out.println("moved piece: " + this.movedPiece.getTypename() + " - id: " +this.movedPiece.getPieceId());
+        //System.out.println(myPrevTerritory.size());
         for (Coord c : myPrevTerritory.keySet()) {
+            //System.out.printf("old coord: %s, piece: %s - id %s\n", c.toString(), myPrevTerritory.get(c).getTypename(), myPrevTerritory.get(c).getPieceId());
             if (myPrevTerritory.get(c).equals(this.movedPiece)) {
+                //System.out.println("equal");
                 prevCord = c;
             }
         }
@@ -546,26 +550,32 @@ public class Board {
 
             switch (typename) {
                 case "king":
-                    newPiece = new PieceKing(coord,parentPiece.isWhitePiece());
+                    //newPiece = new PieceKing(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
                     if (isWhitePiece)
                         kingWhite = coord;
                     else
                         kingBlack = coord;
                     break;
                 case "queen":
-                    newPiece = new PieceQueen(coord,parentPiece.isWhitePiece());
+                    //newPiece = new PieceQueen(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "rook":
-                    newPiece = new PieceRook(coord,parentPiece.isWhitePiece());
+                    //newPiece = new PieceRook(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "bishop":
-                    newPiece = new PieceBishop(coord,parentPiece.isWhitePiece());
+                    //newPiece = new PieceBishop(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "knight":
-                    newPiece = new PieceKnight(coord,parentPiece.isWhitePiece());
+                    //newPiece = new PieceKnight(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "pawn":
-                    newPiece = new PiecePawn(coord,parentPiece.isWhitePiece());
+                    newPiece = parentPiece.makePieceCopy(coord);
+                            //new PiecePawn(coord,parentPiece.isWhitePiece());
                     break;
                 default:
                     break;
