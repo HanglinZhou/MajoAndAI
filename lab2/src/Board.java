@@ -224,6 +224,8 @@ public class Board {
 
                         // if move valid, add move
                         validMoves.add(newMove);
+                        if (this.isOccupiedByEnemyPiece(newMove))
+                            break;
 
                     } else {
                         // if a move is not valid, stop in moving in this direction
@@ -341,6 +343,10 @@ public class Board {
                 // if is indeed currently special move
                 if (!this.isOccupiedByEnemyPiece(move))
                     return false;
+            } else {
+                if (this.isOccupiedByEnemyPiece(move)) {
+                    return false;
+                }
             }
         }
         return true;

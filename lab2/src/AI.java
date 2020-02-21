@@ -109,6 +109,15 @@ public class AI {
     private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
         //System.out.println("H-min start");
         numBoardsVisited++;
+
+        if (passCutoffTest(currDepth - 1)) {
+            //base case: the only place the
+            state.setScore(evaluate(state));
+            state.setExplorationDepth(currDepth - 1);
+            //System.out.println("min - returned in cuttoff");
+            return state;
+        }
+
         List<Move> allValidMoves = state.computeAllValidMoves(isWhitePiece);
         int numAllValidMoves = allValidMoves.size();
         //base case 1: a terminal state is reached 1) stalemate (note: here we only consider one specific case: king vs king
@@ -129,13 +138,7 @@ public class AI {
             return state;
         }
 
-        if (passCutoffTest(currDepth)) {
-            //base case: the only place the
-            state.setScore(evaluate(state));
-            state.setExplorationDepth(currDepth);
-            //System.out.println("min - returned in cuttoff");
-            return state;
-        }
+
 
         Board bestNextBoardFound = null;
         //this is the sorted list of states (based on our exploration policy) after all valid moves
@@ -164,6 +167,7 @@ public class AI {
             beta = Math.min(stateScore, beta);
 
         }
+
         return bestNextBoardFound;
 
     }
@@ -204,10 +208,10 @@ public class AI {
             return state;
         }
 
-        if (passCutoffTest(currDepth)) {
+        if (passCutoffTest(currDepth - 1)) {
             //base case: the only place the
             state.setScore(evaluate(state));
-            state.setExplorationDepth(currDepth);
+            state.setExplorationDepth(currDepth - 1);
             //System.out.println("max - returned in cuttoff");
             return state;
         }
