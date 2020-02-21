@@ -107,14 +107,12 @@ public class AI {
      * @return
      */
     private Board H_min(int currDepth, Board state, boolean isWhitePiece, int alpha, int beta) {
-        //System.out.println("H-min start");
         numBoardsVisited++;
 
         if (passCutoffTest(currDepth - 1)) {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth - 1);
-            //System.out.println("min - returned in cuttoff");
             return state;
         }
 
@@ -126,15 +124,11 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
-            //System.out.println("min - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) {
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MAX_VALUE);
-            System.out.println("min - returned in checkmate, depth: " + currDepth);
-             System.out.println("movedpiece: " + state.movedPiece.getTypename() + " coord: " + state.movedPiece.getCoord() + " score: " + state.getScore());
-            //System.out.println(state.getMovedPiece().typename);
             return state;
         }
 
@@ -146,7 +140,6 @@ public class AI {
         int stateScore = Integer.MAX_VALUE;
         //Question: should we set the initial score here?
         for (Board childState : statesAfterMove) {
-            //System.out.println("min - just entered for look in : statesAfterMove");
             //better state found, update stateScore and bestNextBoardFound
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_max(currDepth+1, childState, !isWhitePiece, alpha, beta);
@@ -156,7 +149,6 @@ public class AI {
                 stateScore = bestNextNextBoardFound.getScore();
             }
             if (stateScore >= bestNextNextBoardFound.getScore()) {
-                //System.out.println("min - setting stateScore");
                 stateScore = bestNextNextBoardFound.getScore();
                 bestNextBoardFound = childState;
                 bestNextBoardFound.setExplorationDepth(bestNextNextBoardFound.getExplorationDepth());
@@ -198,13 +190,11 @@ public class AI {
         if (stalemate(state)) {
             state.setExplorationDepth(currDepth);
             state.setScore(0);
-            //System.out.println("max - returned in stalemate");
             return state;
 
         } else if (checkmate(numAllValidMoves)) { //in this case, we are checkmated!
             state.setExplorationDepth(currDepth);
             state.setScore(Integer.MIN_VALUE);
-            //System.out.println("max - returned in checkmate, depth - " + currDepth);
             return state;
         }
 
@@ -212,7 +202,6 @@ public class AI {
             //base case: the only place the
             state.setScore(evaluate(state));
             state.setExplorationDepth(currDepth - 1);
-            //System.out.println("max - returned in cuttoff");
             return state;
         }
 
@@ -226,20 +215,6 @@ public class AI {
             //TODO: check here and naming is awful
             Board bestNextNextBoardFound = H_min(currDepth+1, childState, !isWhitePiece, alpha, beta);
 
-
-//            //compare by depth also
-//            if (bestNextBoardFound!= null) {
-//                if (bestNextBoardFound.getExplorationDepth() > bestNextNextBoardFound.getExplorationDepth()) {
-//                    if (bestNextNextBoardFound.getScore() < 0)
-//                        continue; //lose
-//                    stateScore = bestNextNextBoardFound.getScore();
-//                }
-//            }
-            if (bestNextNextBoardFound.getMovedPiece().getTypename().equals("knight") && bestNextNextBoardFound.getMovedPiece().getCoord().equals(new Coord(2,1)))
-                System.out.println("knight we want to move" + bestNextNextBoardFound.getMovedPiece().getPieceId()+ ", score: " +bestNextNextBoardFound.getScore());
-            if (bestNextNextBoardFound.getScore() == Integer.MAX_VALUE) {
-                System.out.println("at depth: " + currDepth + " returned from min state: " + bestNextNextBoardFound.getMovedPiece().toString());
-            }
             if (bestNextBoardFound != null && bestNextBoardFound.getExplorationDepth() > bestNextNextBoardFound.getExplorationDepth()) {
                 if (bestNextNextBoardFound.getScore() < 0)
                     continue; //lose
@@ -250,10 +225,6 @@ public class AI {
                 bestNextBoardFound = childState;
                 bestNextBoardFound.setExplorationDepth(bestNextNextBoardFound.getExplorationDepth());
                 bestNextBoardFound.setScore(bestNextNextBoardFound.getScore());
-                if (bestNextBoardFound.getScore() == Integer.MAX_VALUE) {
-                    System.out.println("set the value to be max");
-                }
-
             }
             if (stateScore >= beta)
                 break; //stop exploring other children & return bestNextBoardFound

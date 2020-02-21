@@ -1,5 +1,4 @@
 import java.util.*;
-//import com.google.gson.*;
 
 public class Board {
     final char BLANK = '_';
@@ -32,9 +31,6 @@ public class Board {
         parentBoard = null;
         movedPiece = null;
         explorationDepth = 0;
-        //ask M: maybe we don't want to set the score here, as in the algo, it is set in minimax
-        // score = Integer.MIN_VALUE;
-        //todo: not tested
 
         for (int r = 0; r < boardData.length; r++) {
             for (int c = 0; c < boardData[r].length; c++) {
@@ -92,7 +88,7 @@ public class Board {
         //todo
 
         this.parentBoard = parentBoard;
-        //Q: make sure we can import gson for deep clone(ask Park)
+        //Q: make sure we can import gson for deep clone(ask Jon)
         /* TODO
         Gson gson = new Gson();
         String jsonString = gson.toJson(employeeMap);
@@ -204,7 +200,6 @@ public class Board {
             // for each direction vector v of p, and each scalar multiple c of the vector,
             // check whether currCoord + v*c is valid move, and add all valid moves
             for (int[] dir : p.getValidMoveDirections()) {
-                //System.out.printf("move dir for [%s] %s is (%s, %s)\n", p.isWhitePiece, p.getTypename(), dir[0], dir[1]);
                 for (int c = 1; c <= p.getValidMoveRange(); c++) {
                     // compute destination coord by adding (scalar * direction) to curr coord
                     int newRow = p.getCoord().getRow() + c * dir[0];
@@ -215,13 +210,7 @@ public class Board {
                     if (destCoord.isOutOfRange())
                         break;
                     Move newMove = new Move(p, destCoord);
-                    //System.out.printf("new move created, %s %s to %s\n", p.isWhitePiece(), p.getTypename(), destCoord.toString());
                     if (isMoveValid(newMove)) {
-                        // todo: delete these
-//                        if (newMove.getNewCoord().equals(new Coord(7, 4))) {
-//                            System.out.printf("[%s] %s moves from %s to %s\n", p.isWhitePiece(), newMove.getPiece().getTypename(), p.getCoord().toString(), newMove.getNewCoord().toString());
-//                        }
-
                         // if move valid, add move
                         validMoves.add(newMove);
                         if (this.isOccupiedByEnemyPiece(newMove))
@@ -372,7 +361,6 @@ public class Board {
         if (isWhitePlaying) {
             enemyTerritory = newBoard.getBlackTerritory();
             for (Coord cd : enemyTerritory.keySet()) {
-                //System.out.printf("white playing, (%s, %s)\n", enemyTerritory.get(cd).getTypename(), cd.toString());
             }
         } else {
             enemyTerritory = newBoard.getWhiteTerritory();
@@ -397,15 +385,11 @@ public class Board {
                         break;
 
                     Move mv = new Move(enemyPiece, newCoord);
-                    //System.out.printf("enemy move created, [%s] %s to %s\n", enemyPiece.isWhitePiece, enemyPiece.getTypename(), newCoord.toString());
                     if (newBoard.getBlockingPiece(mv) != null) {
                         if (/*newBoard.isOccupiedByEnemyPiece(mv)*/ newBoard.getBlockingPiece(mv).equals(myKing)) {
                             // if the enemy piece indeed attacks my king, returns true
                             return true;
                         } else {
-                            //System.out.printf("enemy [%s] %s is blocking\n at %s\n",
-                                    //enemyTerritory.get(newCoord).isWhitePiece, enemyTerritory.get(newCoord).getTypename(), newCoord.toString());
-                            // enemy stop moving in the current direction if is blocked
                             break;
 
                         }
@@ -441,10 +425,8 @@ public class Board {
         Piece p = this.getBlockingPiece(move);
         if (p == null || (p.isWhitePiece() != move.getPiece().isWhitePiece())) {
             // if not occupied or occupied by piece of other side
-            //System.out.printf("%s not occupied by own side\n", move.getNewCoord().toString());
             return false;
         }
-        //System.out.printf("%s occupied by own side [%s]\n", move.getNewCoord().toString(), p.isWhitePiece);
         return true;
     }
 
@@ -487,56 +469,14 @@ public class Board {
         // get previous coord from parent board
         Coord prevCord = null;
         HashMap<Coord, Piece> myPrevTerritory = this.parentBoard.getMyTerritory(this.movedPiece.isWhitePiece());
-        //System.out.println("moved piece: " + this.movedPiece.getTypename() + " - id: " +this.movedPiece.getPieceId());
-        //System.out.println(myPrevTerritory.size());
         for (Coord c : myPrevTerritory.keySet()) {
-            //System.out.printf("old coord: %s, piece: %s - id %s\n", c.toString(), myPrevTerritory.get(c).getTypename(), myPrevTerritory.get(c).getPieceId());
             if (myPrevTerritory.get(c).equals(this.movedPiece)) {
-                //System.out.println("equal");
                 prevCord = c;
             }
         }
 
         return movedPiece.getCoord().computeDistance(prevCord);
     }
-
-    /***
-     * Determine if attacker is attacking attackee
-     * @return true if attacker is attacking attackee
-    private boolean ifAttacking(Piece attacker, Piece attackee) {
-
-
-        HashMap<Coord, Piece> myTerritory;
-        HashMap<Coord, Piece> enemyTerritory;
-        if (attackee.isWhitePiece()) {
-            myTerritory = whiteTerritory;
-            enemyTerritory = blackTerritory;
-        } else {
-            myTerritory = blackTerritory;
-            enemyTerritory = whiteTerritory;
-        }
-
-        int currRow = attacker.getCoord().getRow();
-        int currCol = attacker.getCoord().getCol();
-
-        // for the attacker, check whether it is attacking the attackee
-        for (int[] direc : attacker.getValidMoveDirections()) {
-            for (int c = 1; c <= attacker.getValidMoveRange(); c++) {
-                Coord newCoord = new Coord(currRow + c * direc[0], currCol + c * direc[1]);
-
-                // if attacks attackee, returns true
-                if (newCoord.equals(attackee.getCoord()))
-                    return true;
-
-                // if attack is out of range of board, or blocked by other piece than attackee, try another direction
-                if (newCoord.isOutOfRange() || myTerritory.get(newCoord) != null || enemyTerritory.get(newCoord) != null) {
-                    break;
-                }
-            }
-        }
-        return false;
-    }
-     */
 
     /***
      * Deep clone the territory map.
@@ -547,7 +487,6 @@ public class Board {
      */
     private HashMap<Coord,Piece> deepCloneAndSetMovedPiece(HashMap<Coord, Piece> parentTerritory, Move move) {
         HashMap<Coord, Piece> newTerritory = new HashMap<>();
-        //Coord coordToBeRemoved = null;
         for (Map.Entry<Coord, Piece> e : parentTerritory.entrySet()) {
             Piece parentPiece = e.getValue();
             String typename = parentPiece.getTypename();
@@ -558,9 +497,6 @@ public class Board {
             //?same piece
             if (parentPiece.equals(move.getPiece())) {
                 coord = move.getNewCoord();
-                //coordToBeRemoved = parentPiece.getCoord();
-
-                //newTerritory.remove(parentPiece.getCoord());
             } else {
                 coord = parentPiece.getCoord();
             }
@@ -568,7 +504,6 @@ public class Board {
             // typename: name of parent piece
             switch (typename) {
                 case "king":
-                    //newPiece = new PieceKing(coord,parentPiece.isWhitePiece());
                     newPiece = parentPiece.makePieceCopy(coord);
                     if (isWhitePiece)
                         kingWhite = coord;
@@ -576,24 +511,19 @@ public class Board {
                         kingBlack = coord;
                     break;
                 case "queen":
-                    //newPiece = new PieceQueen(coord,parentPiece.isWhitePiece());
                     newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "rook":
-                    //newPiece = new PieceRook(coord,parentPiece.isWhitePiece());
                     newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "bishop":
-                    //newPiece = new PieceBishop(coord,parentPiece.isWhitePiece());
                     newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "knight":
-                    //newPiece = new PieceKnight(coord,parentPiece.isWhitePiece());
                     newPiece = parentPiece.makePieceCopy(coord);
                     break;
                 case "pawn":
                     newPiece = parentPiece.makePieceCopy(coord);
-                            //new PiecePawn(coord,parentPiece.isWhitePiece());
                     break;
                 default:
                     break;
